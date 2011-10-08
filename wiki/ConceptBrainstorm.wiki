@@ -92,6 +92,6 @@
       * Save Playlist
 
 = Todo =
-For future:
-Context dependent help
-Fade in/out for sfx?
+  * For future:
+    * Context dependent help
+    * Fade in/out for sfx?
