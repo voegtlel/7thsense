@@ -1,6 +1,6 @@
 #labels Phase-Requirements,Phase-Design,Deprecated
 = General =
-  * Differentiate in Library <-> Playlist
+  * Differentiate in Library and Playlist
 = Data =
   * FolderNode (Node)
     * Serializable
