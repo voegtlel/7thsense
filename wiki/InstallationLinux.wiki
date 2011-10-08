@@ -1,0 +1,23 @@
+#summary Describes how to install 7thSense under Linux
+
+= Ubuntu =
+
+  * Extract "seventhsense-`*`.zip" (where "`*`" is the current build no.) to your hard disc, if you're not sure where to put it extract the files to _/home/*yourName*/Documents/7thSense_. You may do so by double clicking the zip-file.
+  * Move to the folder you just extracted the files to, right click seventhsense.jar and choose *"Properties"*.
+  * Open the *"Permissions"* tab and check *"Execute"*.
+  * Open the *"Open with"* tab and choose *"OpenJDK Java 6 Runtime"*. If there is no such entry you need to install Java first - see the appropriate entry in this wiki.
+Now you can run the program by double clicking *"seventhsense.jar"*.
+
+
+= Other Linux =
+  * Open up a terminal.
+  * Execute _unzip -d *`*`directory`*`* seventhsense-`*`.zip_ (where "`*`" is the current build no.) and `*`directory`*` is a path somewhere on your hard disc. If you're unsure use _/home/*yourName*/Documents/7thSense_.
+  * Execute _cd `*`directory`*`_ (eg. _cd /home/*yourName*/Documents/7thSense/_).
+  * Execute _chmod +x seventhsense.jar_.
+  * Right click *"seventhsense.jar"* and choose *"Open with OpenJDK Java 6 Runtime"*.
+
+= Installing Java =
+
+== Ubuntu ==
+  * Open up *Ubuntu Software Center* and search for *"Java"*.
+  * Choose *"OpenJDK Java 6 Runtime"* and click on *"Install"*.
