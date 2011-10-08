@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_zip" name="Create runnable jar for project 7thSense and compress all required files for downloading">
+	
+	<!-- Paths -->
+	<property name="path.src" value="src"/>
+	<property name="path.build" value="build"/>
+	<property name="path.output" value="output"/>
+	<property name="path.lib" value="lib"/>
+	
+	<!-- classpath is referenced by id! -->
+	<path id="path.classpath">
+		<fileset dir="${path.lib}" includes="**/*.jar" />
+	</path>
+	
+	<!-- Manifest options -->
+	<property name="manifest.mainclass" value="seventhsense.SeventhSenseStartup"/>
+	<pathconvert property="manifest.classpath" pathsep=" ">
+		<path refid="path.classpath"/>
+		<chainedmapper>
+			<flattenmapper/>
+			<globmapper from="*" to="${path.lib}/*"/>
+		</chainedmapper>
+	</pathconvert>
+	<property name="manifest.splash" value="seventhsense/resources/SplashScreen.png"/>
+	
+	<tstamp>
+		<format property="timestamp" pattern="yyyyMMddHHmmss" />
+	</tstamp>
+	
+	<!-- cleanup previous build -->
+	<target name="clean">
+		<delete verbose="true" failonerror="false">
+			<fileset dir="${path.build}"/>
+		</delete>
+		<delete verbose="true" failonerror="false">
+			<fileset dir="${path.output}"/>
+		</delete>
+	</target>
+	
+	<!-- create directorys -->
+	<target name="init" depends="clean">
+		<!-- Create build path -->
+		<mkdir dir="${path.build}"/>
+		<!-- Create output path -->
+		<mkdir dir="${path.output}"/>
+	</target>
+	
+	<!-- compile code -->
+	<target name="compile" depends="init">
+		<!-- Compile -->
+		<javac srcdir="${path.src}" destdir="${path.build}" classpathref="path.classpath" debug="true" />
+	</target>
+
+	<!-- create jar and put everything to output -->
+	<target name="create_runnable_jar" depends="compile">
+		<jar destfile="${path.output}/seventhsense.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="${manifest.mainclass}"/>
+				<attribute name="Class-Path" value="${manifest.classpath}"/>
+				<attribute name="SplashScreen-Image" value="${manifest.splash}"/>
+			</manifest>
+			<!-- Copy Resources (anything, that is not source) -->
+			<fileset dir="${path.src}" excludes="**/*.java"/>
+			<!-- Copy Class Code -->
+			<fileset dir="${path.build}"/>
+		</jar>
+		<copy todir="${path.output}/${path.lib}">
+			<!-- Copy Libs -->
+			<path refid="path.classpath" />
+		</copy>
+		<copy todir="${path.output}">
+			<!-- Copy Licenses -->
+			<fileset dir="." includes="LICENSE*" />
+		</copy>
+	</target>
+	
+	<!-- create zip -->
+	<target name="create_zip" depends="create_runnable_jar">
+		<zip destfile="seventhsense-${timestamp}.zip">
+			<zipfileset dir="${path.output}" prefix="" />
+		</zip>
+	</target>
+</project>
