@@ -11,6 +11,7 @@
  * Extract "seventhsense-`*`.zip" (where "`*`" is the current build no.).
  * Simply run seventhsense.jar after extraction.
  * To help finding bugs and the developing process, you can add the programm argument "-logger" to show a logger window and log to "log.txt"
+ * See [InstallationLinux] for a Linux setup guide.
 
 = Basic setup for a *Basic Scenario* =
 
