@@ -43,7 +43,7 @@ import seventhsense.data.scenario.sound.player.SoundEventType;
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxModel extends AbstractBasicScenarioTableModel<SoundFxItem>
+public class BasicScenarioSoundFxTableModel extends AbstractBasicScenarioTableModel<SoundFxItem>
 {
 	/**
 	 * Default serial version

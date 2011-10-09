@@ -56,7 +56,7 @@ public class BasicScenarioView extends JPanel
 	private static final long serialVersionUID = 1L;
 	private final BasicScenarioMusicTablePanel _musicPanel;
 	private final MusicView _musicView;
-	private final BasicScenarioSoundFxPanel _soundFxPanel;
+	private final BasicScenarioSoundFxTablePanel _soundFxPanel;
 	private final SoundFxView _soundFxView;
 	private final JSplitPane _splitPaneMusic;
 	private final JSplitPane _splitPaneSoundFx;
@@ -124,7 +124,7 @@ public class BasicScenarioView extends JPanel
 		_splitPaneSoundFx.setDividerSize(10);
 		tabbedPane.addTab("Sound Effects", null, _splitPaneSoundFx, "View and edit sound effect properties");
 
-		_soundFxPanel = new BasicScenarioSoundFxPanel();
+		_soundFxPanel = new BasicScenarioSoundFxTablePanel();
 		_soundFxPanel.addTableSelectionListener(new ListSelectionListener()
 		{
 			@Override
