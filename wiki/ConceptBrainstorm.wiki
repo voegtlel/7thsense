@@ -96,3 +96,4 @@
   * For future:
     * Context dependent help
     * Fade in/out for sfx?
+    * Add a add "multiple media files" button to Music/SoundFx list
