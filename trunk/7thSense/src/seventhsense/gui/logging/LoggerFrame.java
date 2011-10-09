@@ -58,7 +58,7 @@ import javax.swing.text.StyledDocument;
  * @author Parallan
  *
  */
-public class LoggerFrame
+public class LoggerFrame //NOPMD
 {
 	private final static Logger GLOBAL_LOGGER = Logger.getLogger("");
 	
@@ -67,6 +67,7 @@ public class LoggerFrame
 	private final StyledDocument _document;
 	
 	private final AttributeSet _messageInfoAttributeSet;
+	private final AttributeSet _messageClassAttributeSet;
 	private final AttributeSet _messageWarningAttributeSet;
 	private final AttributeSet _messageExceptionAttributeSet;
 	private final AttributeSet _messageExceptionClassAttributeSet;
@@ -107,12 +108,14 @@ public class LoggerFrame
 		_textPaneLogging.setStyledDocument(_document);
 		
 		_messageInfoAttributeSet = new SimpleAttributeSet();
+		_messageClassAttributeSet = new SimpleAttributeSet();
 		_messageWarningAttributeSet = new SimpleAttributeSet();
 		_messageExceptionAttributeSet = new SimpleAttributeSet();
 		_messageExceptionClassAttributeSet = new SimpleAttributeSet();
 		_messageExceptionMethodAttributeSet = new SimpleAttributeSet();
 		_messageExceptionSourceAttributeSet = new SimpleAttributeSet();
 		((SimpleAttributeSet)_messageWarningAttributeSet).addAttribute(StyleConstants.CharacterConstants.Foreground, Color.red);
+		((SimpleAttributeSet)_messageClassAttributeSet).addAttribute(StyleConstants.CharacterConstants.Italic, true);
 		((SimpleAttributeSet)_messageExceptionAttributeSet).addAttribute(StyleConstants.CharacterConstants.Foreground, Color.red);
 		((SimpleAttributeSet)_messageExceptionClassAttributeSet).addAttribute(StyleConstants.CharacterConstants.Bold, true);
 		((SimpleAttributeSet)_messageExceptionClassAttributeSet).addAttribute(StyleConstants.CharacterConstants.LeftIndent, 10);
@@ -174,7 +177,7 @@ public class LoggerFrame
 	private void attachLogger()
 	{
 		GLOBAL_LOGGER.setUseParentHandlers(true);
-		GLOBAL_LOGGER.setLevel(Level.FINE);
+		//GLOBAL_LOGGER.setLevel(Level.FINE);
 		GLOBAL_LOGGER.addHandler(_loggerHandler);
 	}
 	
@@ -214,20 +217,44 @@ public class LoggerFrame
 	}
 	
 	/**
+	 * Searches all parent loggers for a set level and returns it if found
+	 * 
+	 * @param record record to search the logging level for
+	 * @return logging level of the given record
+	 */
+	private Level getRecordLoggerLevel(final LogRecord record)
+	{
+		Logger logger = Logger.getLogger(record.getLoggerName());
+		while(logger != null)
+		{
+			if(logger.getLevel() != null)
+			{
+				return logger.getLevel();
+			}
+			logger = logger.getParent();
+		}
+		return Level.ALL;
+	}
+	
+	/**
 	 * Event.
 	 * 
 	 * @param record record
 	 */
 	private void publishLogRecord(final LogRecord record)
 	{
-		if(record.getSourceClassName().startsWith("seventhsense"))
-		{
+		if((record.getSourceClassName() != null) && record.getSourceClassName().startsWith("seventhsense") && (record.getLevel().intValue() >= getRecordLoggerLevel(record).intValue()))
+		{	
 			final boolean isAtBottom = (_textPaneLogging.getCaretPosition() >= _document.getLength());
 			
 			AttributeSet messageAttributeSet = _messageInfoAttributeSet;
 			if(record.getLevel().intValue() >= Level.WARNING.intValue())
 			{
 				messageAttributeSet = _messageWarningAttributeSet;
+			}
+			if(record.getSourceClassName() != null)
+			{
+				writeString(record.getSourceClassName() + "." + record.getSourceMethodName() + ": ", _messageClassAttributeSet);
 			}
 			writeString(record.getMessage() + "\r\n", messageAttributeSet);
 			if(record.getThrown() != null)
