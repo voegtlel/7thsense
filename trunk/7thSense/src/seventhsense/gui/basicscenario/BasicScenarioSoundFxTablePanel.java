@@ -38,7 +38,7 @@ import seventhsense.gui.table.TableHeaderIconCellRenderer;
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxPanel extends AbstractBasicScenarioTablePanel<SoundFxItem>
+public class BasicScenarioSoundFxTablePanel extends AbstractBasicScenarioTablePanel<SoundFxItem>
 {
 	/**
 	 * Default serial version
@@ -48,9 +48,9 @@ public class BasicScenarioSoundFxPanel extends AbstractBasicScenarioTablePanel<S
 	/**
 	 * Creates the panel
 	 */
-	public BasicScenarioSoundFxPanel()
+	public BasicScenarioSoundFxTablePanel()
 	{
-		super(new BasicScenarioSoundFxModel(), new BasicScenarioSoundFxTransferHandler());
+		super(new BasicScenarioSoundFxTableModel(), new BasicScenarioSoundFxTableTransferHandler());
 
 		_table.getColumnModel().getColumn(0).setHeaderRenderer(new TableHeaderIconCellRenderer(
 				_table.getTableHeader().getDefaultRenderer(),

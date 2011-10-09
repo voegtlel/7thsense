@@ -40,7 +40,7 @@ import seventhsense.gui.transfer.SoundFxTransferable;
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxTransferHandler extends AbstractBasicScenarioTransferHandler<SoundFxItem>
+public class BasicScenarioSoundFxTableTransferHandler extends AbstractBasicScenarioTransferHandler<SoundFxItem>
 {
 	/**
 	 * Default serial version
@@ -50,7 +50,7 @@ public class BasicScenarioSoundFxTransferHandler extends AbstractBasicScenarioTr
 	/**
 	 * Creates the SoundFx transfer handler
 	 */
-	public BasicScenarioSoundFxTransferHandler()
+	public BasicScenarioSoundFxTableTransferHandler()
 	{
 		super(SoundFxTransferable.SOUNDFX_TRANSFERABLE_FLAVOR);
 	}
@@ -58,6 +58,6 @@ public class BasicScenarioSoundFxTransferHandler extends AbstractBasicScenarioTr
 	@Override
 	protected Transferable createTransferable(final JComponent c)
 	{
-		return new SoundFxTransferable(new SoundFxItem[]{((BasicScenarioSoundFxPanel)c).getSelectedItem()});
+		return new SoundFxTransferable(new SoundFxItem[]{((BasicScenarioSoundFxTablePanel)c).getSelectedItem()});
 	}
 }
