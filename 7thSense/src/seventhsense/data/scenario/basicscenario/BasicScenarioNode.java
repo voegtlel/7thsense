@@ -80,7 +80,7 @@ public class BasicScenarioNode extends AbstractScenarioNode
 	/**
 	 * Is Valid
 	 */
-	private boolean _isValid = false;
+	private boolean _isValid = true;
 
 	/**
 	 * Constructor
