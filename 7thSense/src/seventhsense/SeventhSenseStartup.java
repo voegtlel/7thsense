@@ -144,12 +144,12 @@ public class SeventhSenseStartup
 			}
 		}
 		
-		if(arguments.containsKey("log-finest"))
+		if(arguments.containsKey("log-all"))
 		{
-			final List<String> debugArgs = arguments.get("log-finest");
+			final List<String> debugArgs = arguments.get("log-all");
 			for(String arg : debugArgs)
 			{
-				Logger.getLogger(arg).setLevel(Level.FINEST);
+				Logger.getLogger(arg).setLevel(Level.ALL);
 			}
 		}
 		
