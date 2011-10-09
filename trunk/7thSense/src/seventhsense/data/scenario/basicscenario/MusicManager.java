@@ -49,6 +49,11 @@ import seventhsense.data.scenario.sound.player.SoundEventType;
 public class MusicManager extends AbstractScenarioManager<MusicItem>
 {
 	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_RANDOMIZED = "randomized";
+
+	/**
 	 * Default serial version for serializable
 	 */
 	private static final long serialVersionUID = 1L;
@@ -102,6 +107,8 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 		{
 			orderMusicOrder();
 		}
+		
+		fireChanged(PROPERTY_RANDOMIZED);
 	}
 
 	/**

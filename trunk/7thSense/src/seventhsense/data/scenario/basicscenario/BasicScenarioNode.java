@@ -53,6 +53,11 @@ import seventhsense.data.scenario.sound.player.SoundEventType;
 public class BasicScenarioNode extends AbstractScenarioNode
 {
 	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_VALID = "valid";
+
+	/**
 	 * Default serial version for serializable
 	 */
 	private static final long serialVersionUID = 1L;
@@ -225,10 +230,10 @@ public class BasicScenarioNode extends AbstractScenarioNode
 		final boolean isValid = _musicManager.isValid() && _soundFxManager.isValid();
 		if (isValid != _isValid)
 		{
-			fireNodeChanging("valid");
+			fireNodeChanging(PROPERTY_VALID);
 			LOGGER.log(Level.FINER, "validate " + _isValid + " -> " + isValid);
 			_isValid = isValid;
-			fireNodeChanged("valid");
+			fireNodeChanged(PROPERTY_VALID);
 		}
 	}
 

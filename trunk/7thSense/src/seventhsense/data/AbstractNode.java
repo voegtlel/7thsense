@@ -43,6 +43,11 @@ import seventhsense.data.eventlist.EventList;
 public abstract class AbstractNode implements INode
 {
 	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_NAME = "name";
+
+	/**
 	 * Default serial version for serializable
 	 */
 	private static final long serialVersionUID = 1L;
@@ -98,9 +103,9 @@ public abstract class AbstractNode implements INode
 	@Override
 	public void setName(final String name)
 	{
-		fireNodeChanging("name");
+		fireNodeChanging(PROPERTY_NAME);
 		_name = name;
-		fireNodeChanged("name");
+		fireNodeChanged(PROPERTY_NAME);
 	}
 
 	@Override

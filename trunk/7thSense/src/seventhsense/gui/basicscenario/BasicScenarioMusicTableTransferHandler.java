@@ -40,7 +40,7 @@ import seventhsense.gui.transfer.MusicTransferable;
  * @author Parallan
  *
  */
-public class BasicScenarioMusicTransferHandler extends AbstractBasicScenarioTransferHandler<MusicItem>
+public class BasicScenarioMusicTableTransferHandler extends AbstractBasicScenarioTransferHandler<MusicItem>
 {
 	/**
 	 * Default serial version
@@ -49,17 +49,15 @@ public class BasicScenarioMusicTransferHandler extends AbstractBasicScenarioTran
 	
 	/**
 	 * Creates the transfer handler for music items
-	 * 
-	 * @param editorPanel panel to operate on
 	 */
-	public BasicScenarioMusicTransferHandler(final BasicScenarioMusicPanel editorPanel)
+	public BasicScenarioMusicTableTransferHandler()
 	{
-		super(editorPanel, MusicTransferable.MUSIC_TRANSFERABLE_FLAVOR);
+		super(MusicTransferable.MUSIC_TRANSFERABLE_FLAVOR);
 	}
 
 	@Override
 	protected Transferable createTransferable(final JComponent c)
 	{
-		return new MusicTransferable(new MusicItem[]{_editorPanel.getSelectedItem()});
+		return new MusicTransferable(new MusicItem[]{((BasicScenarioMusicTablePanel)c).getSelectedItem()});
 	}
 }

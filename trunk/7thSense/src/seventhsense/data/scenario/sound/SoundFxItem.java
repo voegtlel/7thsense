@@ -41,6 +41,31 @@ import seventhsense.data.scenario.ScriptItem;
 public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 {
 	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_FINISH_SCRIPT = "finishScript";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_INIT_SCRIPT = "initScript";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_SCRIPT_NAME = "scriptName";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_MAX_REPLAY_WAIT_TIME = "maxReplayWaitTime";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_MIN_REPLAY_WAIT_TIME = "minReplayWaitTime";
+
+	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
@@ -123,7 +148,7 @@ public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 	public void setMinReplayWaitTime(final double minReplayWaitTime)
 	{
 		_minReplayWaitTime = minReplayWaitTime;
-		fireChanged("minReplayWaitTime");
+		fireChanged(PROPERTY_MIN_REPLAY_WAIT_TIME);
 	}
 
 	/**
@@ -144,7 +169,7 @@ public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 	public void setMaxReplayWaitTime(final double maxReplayWaitTime)
 	{
 		_maxReplayWaitTime = maxReplayWaitTime;
-		fireChanged("maxReplayWaitTime");
+		fireChanged(PROPERTY_MAX_REPLAY_WAIT_TIME);
 	}
 
 	/**
@@ -155,7 +180,7 @@ public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 	public void setScriptName(final String scriptName)
 	{
 		_scriptName = scriptName;
-		fireChanged("scriptName");
+		fireChanged(PROPERTY_SCRIPT_NAME);
 	}
 
 	/**
@@ -176,7 +201,7 @@ public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 	public void setInitScript(final ScriptItem initScript)
 	{
 		_initScript = initScript;
-		fireChanged("initScript");
+		fireChanged(PROPERTY_INIT_SCRIPT);
 	}
 
 	/**
@@ -197,7 +222,7 @@ public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 	public void setFinishScript(final ScriptItem finishScript)
 	{
 		_finishScript = finishScript;
-		fireChanged("finishScript");
+		fireChanged(PROPERTY_FINISH_SCRIPT);
 	}
 
 	/**

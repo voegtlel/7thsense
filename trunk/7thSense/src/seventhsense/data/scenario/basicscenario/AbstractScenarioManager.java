@@ -30,6 +30,7 @@ package seventhsense.data.scenario.basicscenario;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.Mixer;
@@ -51,6 +52,16 @@ import seventhsense.data.scenario.sound.player.SoundEventType;
  */
 public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> implements Serializable
 {
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_VALID = "valid";
+	
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_FADE_TIME = "fadeTime";
+
 	/**
 	 * Default serial version for serializable
 	 */
@@ -90,6 +101,11 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 * Mixer used for playing
 	 */
 	protected transient Mixer _mixer;
+
+	/**
+	 * Listener list for events in a scenario manager
+	 */
+	private final EventList<IScenarioManagerListener> _listeners = new EventList<IScenarioManagerListener>();
 
 	/**
 	 * Constructor
@@ -138,6 +154,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	public void setFadeTime(final double fadeTime)
 	{
 		_fadeTime = fadeTime;
+		fireChanged(PROPERTY_FADE_TIME);
 	}
 
 	/**
@@ -228,19 +245,28 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 */
 	public void validate()
 	{
+		final boolean wasValid = _isValid;
 		_isValid = true;
 		for (AbstractSoundItem<E> item : _soundList)
 		{
 			if (!item.validate())
 			{
 				_isValid = false;
+				if(wasValid)
+				{
+					fireChanged(PROPERTY_VALID);
+				}
 				break;
 			}
+		}
+		if(!wasValid)
+		{
+			fireChanged(PROPERTY_VALID);
 		}
 	}
 
 	/**
-	 * Add an item listener
+	 * Add an item listener, that listens to all items
 	 * 
 	 * @param listener listener
 	 */
@@ -257,6 +283,26 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	public void removeItemListener(final ISoundItemListener<E> listener)
 	{
 		_itemListeners.remove(listener);
+	}
+	
+	/**
+	 * Add an item listener, that listens to all items
+	 * 
+	 * @param listener listener
+	 */
+	public void addListener(final IScenarioManagerListener listener)
+	{
+		_listeners.add(listener);
+	}
+
+	/**
+	 * Remove an item listener
+	 * 
+	 * @param listener listener
+	 */
+	public void removeListener(final IScenarioManagerListener listener)
+	{
+		_listeners.remove(listener);
 	}
 
 	/**
@@ -284,6 +330,19 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 		for (ISoundItemListener<E> listener : _itemListeners.iterateEvents())
 		{
 			listener.soundEvent(item, event);
+		}
+	}
+	
+	/**
+	 * Fires changed event.
+	 * 
+	 * @param property property
+	 */
+	protected void fireChanged(final String property)
+	{
+		for (IScenarioManagerListener listener : _listeners.iterateEvents())
+		{
+			listener.changed(property);
 		}
 	}
 

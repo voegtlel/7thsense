@@ -402,7 +402,7 @@ public class SoundFxScriptingPanel extends JPanel
 		if (_performChangeEvents)
 		{
 			_performChangeEvents = false;
-			if ((property == null) || "initScript".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_INIT_SCRIPT.equals(property))
 			{
 				if (_data.getInitScript() == null)
 				{
@@ -413,7 +413,7 @@ public class SoundFxScriptingPanel extends JPanel
 					_textAreaInitScript.setText(_data.getInitScript().getSourceCode());
 				}
 			}
-			if ((property == null) || "finishScript".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_FINISH_SCRIPT.equals(property))
 			{
 				if (_data.getFinishScript() == null)
 				{
@@ -424,7 +424,7 @@ public class SoundFxScriptingPanel extends JPanel
 					_textAreaFinishScript.setText(_data.getFinishScript().getSourceCode());
 				}
 			}
-			if ((property == null) || "scriptName".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_SCRIPT_NAME.equals(property))
 			{
 				if (_data.getScriptName() == null)
 				{

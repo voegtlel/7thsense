@@ -54,7 +54,7 @@ public class BasicScenarioView extends JPanel
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
-	private final BasicScenarioMusicPanel _musicPanel;
+	private final BasicScenarioMusicTablePanel _musicPanel;
 	private final MusicView _musicView;
 	private final BasicScenarioSoundFxPanel _soundFxPanel;
 	private final SoundFxView _soundFxView;
@@ -96,7 +96,7 @@ public class BasicScenarioView extends JPanel
 		_splitPaneMusic.setOneTouchExpandable(true);
 		_splitPaneMusic.setResizeWeight(0.5);
 
-		_musicPanel = new BasicScenarioMusicPanel();
+		_musicPanel = new BasicScenarioMusicTablePanel();
 		_musicPanel.addTableSelectionListener(new ListSelectionListener()
 		{
 			@Override
@@ -188,7 +188,7 @@ public class BasicScenarioView extends JPanel
 	 */
 	public void setModel(final BasicScenarioNode data)
 	{
-		_musicPanel.setModel(data);
-		_soundFxPanel.setModel(data);
+		_musicPanel.setModel(data.getMusicManager().getList());
+		_soundFxPanel.setModel(data.getSoundFxManager().getList());
 	}
 }
