@@ -30,6 +30,8 @@ package seventhsense.data.scenario.basicscenario;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -66,7 +68,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	/**
 	 * Flag indicating if music is currently randomized
 	 */
-	private boolean _isMusicRandomized = false;
+	private boolean _isRandomized = false;
 
 	/**
 	 * Indicates the order of the music to play
@@ -94,12 +96,13 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 
 	/**
 	 * Setter for isMusicRandomized
-	 * @param isMusicRandomized new value
+	 * 
+	 * @param isRandomized new value
 	 */
-	public void setMusicRandomized(final boolean isMusicRandomized)
+	public void setRandomized(final boolean isRandomized)
 	{
-		_isMusicRandomized = isMusicRandomized;
-		if (isMusicRandomized)
+		_isRandomized = isRandomized;
+		if (isRandomized)
 		{
 			randomizeMusicOrder();
 		}
@@ -116,9 +119,9 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	 * 
 	 * @return true, if music is randomized
 	 */
-	public boolean isMusicRandomized()
+	public boolean isRandomized()
 	{
-		return _isMusicRandomized;
+		return _isRandomized;
 	}
 
 	/**
@@ -148,16 +151,10 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	 */
 	public void randomizeMusicOrder()
 	{
-		_isMusicRandomized = true;
-		final List<Integer> newOrder = new ArrayList<Integer>();
-		final Random rand = new Random();
-		while (!_musicOrder.isEmpty())
-		{
-			final int i = rand.nextInt(_musicOrder.size());
-			newOrder.add(_musicOrder.get(i));
-			_musicOrder.remove(i);
-		}
-		_musicOrder = newOrder;
+		_isRandomized = true;
+		LOGGER.log(Level.FINE, "randomize last order: " + _musicOrder);
+		Collections.shuffle(_musicOrder);
+		LOGGER.log(Level.FINE, "randomize new order: " + _musicOrder);
 	}
 
 	/**
@@ -165,7 +162,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	 */
 	public void orderMusicOrder()
 	{
-		_isMusicRandomized = false;
+		_isRandomized = false;
 		for (int i = 0; i < _musicOrder.size(); i++)
 		{
 			_musicOrder.set(i, i);
@@ -248,7 +245,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 				if (nextIndex >= _soundList.size())
 				{
 					nextIndex = 0;
-					if(_isMusicRandomized)
+					if(_isRandomized)
 					{
 						//after randomizing, restart counter
 						randomizeMusicOrder();
@@ -277,7 +274,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	protected void onItemAdded(final int index, final MusicItem item)
 	{
 		super.onItemAdded(index, item);
-		if (_isMusicRandomized)
+		if (_isRandomized)
 		{
 			final Random newPos = new Random();
 			_musicOrder.add(newPos.nextInt(_musicOrder.size() + 1), _soundList.size() - 1);
@@ -404,7 +401,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	{
 		final MusicManager clone = new MusicManager();
 
-		clone.setMusicRandomized(_isMusicRandomized);
+		clone.setRandomized(_isRandomized);
 		for (MusicItem musicItem : _soundList)
 		{
 			clone.getList().add(musicItem.deepClone());
@@ -423,7 +420,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 		{
 			_musicOrder.add(i);
 		}
-		if (_isMusicRandomized)
+		if (_isRandomized)
 		{
 			randomizeMusicOrder();
 		}

@@ -28,10 +28,12 @@
 package seventhsense.gui.player;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,22 +41,18 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import seventhsense.data.scenario.sound.DelayThread;
 import seventhsense.data.scenario.sound.IPlayable;
 import seventhsense.data.scenario.sound.SoundException;
-
-import java.awt.Container;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import seventhsense.gui.ModelView;
 import seventhsense.gui.timeslider.TimeSlider;
-import javax.swing.JLabel;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.AncestorEvent;
 import seventhsense.gui.timeslider.TimeSliderLinear;
 
 /**
@@ -63,7 +61,7 @@ import seventhsense.gui.timeslider.TimeSliderLinear;
  * @author Drag-On
  *
  */
-public class SoundPlayer extends JPanel
+public class SoundPlayer extends ModelView<IPlayable>
 {
 	/**
 	 * Default serial version for serializable
@@ -318,6 +316,7 @@ public class SoundPlayer extends JPanel
 	 * 
 	 * @param model Data model to use
 	 */
+	@Override
 	public void setModel(final IPlayable model)
 	{
 		_model = model;

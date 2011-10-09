@@ -1,5 +1,5 @@
 /*
- * SoundFxView.java
+ * BasicScenarioSoundFxManagerPanel.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -25,54 +25,47 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.gui.soundfx;
+package seventhsense.gui.basicscenario;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JTabbedPane;
-
+import seventhsense.data.scenario.basicscenario.SoundFxManager;
 import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.gui.ModelView;
+import seventhsense.gui.soundfx.SoundFxView;
 
 /**
- * Panel for editing SoundFx items
+ * Panel for BasicScenarioSoundFxManager
  * 
  * @author Parallan
  *
  */
-public class SoundFxView extends ModelView<SoundFxItem>
+public class BasicScenarioSoundFxManagerPanel extends AbstractBasicScenarioManagerPanel<SoundFxItem, SoundFxManager>
 {
 	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final SoundFxBasicPanel _basicPanel;
-	private final SoundFxScriptingPanel _scriptingPanel;
+	private SoundFxManager _data;
 
 	/**
-	 * Create the panel.
+	 * 
 	 */
-	public SoundFxView()
+	public BasicScenarioSoundFxManagerPanel()
 	{
-		super();
-		setLayout(new BorderLayout(0, 0));
-
-		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		add(tabbedPane);
-
-		_basicPanel = new SoundFxBasicPanel();
-		tabbedPane.addTab("Basic", null, _basicPanel, "Basic properties for the sound effect");
-
-		_scriptingPanel = new SoundFxScriptingPanel();
-		tabbedPane.addTab("Scripting", null, _scriptingPanel, "Advanced properties for the sound effect for scripting javascript");
+		super(new BasicScenarioSoundFxTablePanel(), new SoundFxView());
 	}
 
-	@Override
-	public void setModel(final SoundFxItem data)
+	/**
+	 * Sets the model
+	 * 
+	 * @param data model
+	 */
+	public void setModel(final SoundFxManager data)
 	{
-		_basicPanel.setModel(data);
-		_scriptingPanel.setModel(data);
+		if (_data != data)
+		{
+			_data = data;
+			super.setModel(data);
+			setEnabled(_data != null);
+		}
 	}
 }

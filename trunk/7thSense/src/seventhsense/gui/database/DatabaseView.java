@@ -29,7 +29,6 @@ package seventhsense.gui.database;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
@@ -39,6 +38,7 @@ import javax.swing.event.TreeSelectionListener;
 
 import seventhsense.data.INode;
 import seventhsense.data.eventlist.EventList;
+import seventhsense.gui.ModelView;
 import seventhsense.gui.flatview.FlatView;
 import seventhsense.gui.treeview.TreeView;
 
@@ -48,7 +48,7 @@ import seventhsense.gui.treeview.TreeView;
  * @author Parallan
  *
  */
-public class DatabaseView extends JPanel
+public class DatabaseView extends ModelView<INode>
 {
 
 	/**
@@ -93,7 +93,7 @@ public class DatabaseView extends JPanel
 		tabbedPane.addTab("Flat", null, scrollPane, "Shows the scenarios as a flat list");
 		
 		_flatView = new FlatView();
-		_flatView.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+		_flatView.addListSelectionListener(new ListSelectionListener()
 		{
 			@Override
 			public void valueChanged(final ListSelectionEvent e)
@@ -227,11 +227,7 @@ public class DatabaseView extends JPanel
 		return _treeView.getModel();
 	}
 
-	/**
-	 * Sets the model
-	 * 
-	 * @param root root item of model
-	 */
+	@Override
 	public void setModel(final INode root)
 	{
 		_treeView.setModel(root);

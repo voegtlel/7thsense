@@ -250,6 +250,7 @@ public class SoundFile implements IPlayer
 		final double volumeValue = Math.min(Math.max(_volumeFactor.getValue(volume), 0.0001), 1.0);
 		final float newVolume = (float) Math.min(Math.max(Math.log(volumeValue) / Math.log(VOLUME_EXPONENT) * VOLUME_MUL, _gainControl.getMinimum()), 0);
 		_gainControl.setValue(newVolume);
+		LOGGER.log(Level.FINEST, "set volume to " + (volume*100) + "% -> " + newVolume + " db");
 		fireEvent(SoundEventType.Volume);
 	}
 	

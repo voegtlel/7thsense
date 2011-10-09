@@ -27,6 +27,8 @@
  */
 package seventhsense.data.scenario.sound.player;
 
+import java.util.logging.Level;
+
 import seventhsense.data.eventlist.EventList;
 import seventhsense.data.fx.Fx;
 import seventhsense.data.fx.IFxListener;
@@ -91,7 +93,7 @@ public class SoundFadeFile implements IPlayerFade
 				}
 			}
 		});
-		_volumeFx = new Fx(100, new LinearTransition());
+		_volumeFx = new Fx(50, new LinearTransition());
 		_volumeFx.addFxSetter(new IFxSetter()
 		{
 			@Override

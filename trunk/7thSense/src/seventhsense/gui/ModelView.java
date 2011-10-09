@@ -1,5 +1,5 @@
 /*
- * SoundFxView.java
+ * IModelEditor.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -25,54 +25,27 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.gui.soundfx;
+package seventhsense.gui;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JTabbedPane;
-
-import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.gui.ModelView;
+import javax.swing.JPanel;
 
 /**
- * Panel for editing SoundFx items
+ * Abstract class for a model viewer and/or editor
  * 
  * @author Parallan
  *
  */
-public class SoundFxView extends ModelView<SoundFxItem>
+public abstract class ModelView<E> extends JPanel
 {
 	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private final SoundFxBasicPanel _basicPanel;
-	private final SoundFxScriptingPanel _scriptingPanel;
 
 	/**
-	 * Create the panel.
+	 * Sets the displayed model
+	 * 
+	 * @param model model to set or null to clear
 	 */
-	public SoundFxView()
-	{
-		super();
-		setLayout(new BorderLayout(0, 0));
-
-		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		add(tabbedPane);
-
-		_basicPanel = new SoundFxBasicPanel();
-		tabbedPane.addTab("Basic", null, _basicPanel, "Basic properties for the sound effect");
-
-		_scriptingPanel = new SoundFxScriptingPanel();
-		tabbedPane.addTab("Scripting", null, _scriptingPanel, "Advanced properties for the sound effect for scripting javascript");
-	}
-
-	@Override
-	public void setModel(final SoundFxItem data)
-	{
-		_basicPanel.setModel(data);
-		_scriptingPanel.setModel(data);
-	}
+	public abstract void setModel(E model);
 }

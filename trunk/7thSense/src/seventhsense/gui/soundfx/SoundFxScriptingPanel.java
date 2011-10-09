@@ -38,6 +38,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -55,7 +56,7 @@ import seventhsense.data.scenario.ScriptItem;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.SoundFxItem;
 import seventhsense.data.scenario.sound.player.SoundEventType;
-import javax.swing.ImageIcon;
+import seventhsense.gui.ModelView;
 
 /**
  * Panel for editing scripts
@@ -63,7 +64,7 @@ import javax.swing.ImageIcon;
  * @author Parallan
  *
  */
-public class SoundFxScriptingPanel extends JPanel
+public class SoundFxScriptingPanel extends ModelView<SoundFxItem>
 {
 	/**
 	 * Default serial version
@@ -439,11 +440,7 @@ public class SoundFxScriptingPanel extends JPanel
 		}
 	}
 
-	/**
-	 * Set the model
-	 * 
-	 * @param data model
-	 */
+	@Override
 	public void setModel(final SoundFxItem data)
 	{
 		if (data != _data)

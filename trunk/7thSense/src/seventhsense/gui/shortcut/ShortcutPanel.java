@@ -36,13 +36,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 import seventhsense.data.INode;
 import seventhsense.data.eventlist.EventList;
 import seventhsense.data.scenario.sound.IPlayable;
+import seventhsense.gui.ModelView;
 
 /**
  * Panel for keyboard-shortcuts
@@ -50,7 +50,7 @@ import seventhsense.data.scenario.sound.IPlayable;
  * @author Parallan
  *
  */
-public class ShortcutPanel extends JPanel
+public class ShortcutPanel extends ModelView<IPlayable>
 {
 	/**
 	 * Default serial version
@@ -153,11 +153,7 @@ public class ShortcutPanel extends JPanel
 		}
 	}
 
-	/**
-	 * Sets the model
-	 * 
-	 * @param model model
-	 */
+	@Override
 	public void setModel(final IPlayable model)
 	{
 		_model = model;

@@ -37,7 +37,6 @@ import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -48,6 +47,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import seventhsense.data.INode;
+import seventhsense.gui.ModelView;
 
 /**
  * This class handles the TreeView window
@@ -55,7 +55,7 @@ import seventhsense.data.INode;
  * @author Parallan, Drag-On
  *
  */
-public class TreeView extends JPanel
+public class TreeView extends ModelView<INode>
 {
 	/**
 	 * Default, required by Serializable
@@ -254,6 +254,7 @@ public class TreeView extends JPanel
 	 * 
 	 * @param node node to use as root for the model
 	 */
+	@Override
 	public void setModel(final INode node)
 	{
 		_treeModel.setRoot(node);
