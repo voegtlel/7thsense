@@ -27,14 +27,16 @@
  */
 package seventhsense.gui.basicscenario;
 
-import javax.swing.JPanel;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
 
 import seventhsense.data.scenario.basicscenario.IScenarioManagerListener;
 import seventhsense.data.scenario.basicscenario.MusicManager;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.JCheckBox;
-import java.awt.Insets;
+import seventhsense.data.scenario.sound.MusicItem;
+import seventhsense.gui.music.MusicView;
 
 /**
  * Panel for BasicScenarioMusicManager
@@ -42,17 +44,18 @@ import java.awt.Insets;
  * @author Parallan
  *
  */
-public class BasicScenarioMusicManagerPanel extends JPanel
+public class BasicScenarioMusicManagerPanel extends AbstractBasicScenarioManagerPanel<MusicItem, MusicManager>
 {
 	/**
 	 * Default serial version
 	 */
-	
 	private static final long serialVersionUID = 1L;
-	private final BasicScenarioMusicTablePanel _basicScenarioMusicPanel;
-	private final JCheckBox _checkboxShuffle;
 	
-	private final IScenarioManagerListener _scenarioManagerListener;
+	private final JCheckBox _checkBoxRandomize;
+	
+	private final transient IScenarioManagerListener _dataListener;
+	
+	private boolean _performChangeEvents = true;
 	
 	private MusicManager _data;
 
@@ -61,37 +64,45 @@ public class BasicScenarioMusicManagerPanel extends JPanel
 	 */
 	public BasicScenarioMusicManagerPanel()
 	{
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
+		super(new BasicScenarioMusicTablePanel(), new MusicView());
 		
-		_basicScenarioMusicPanel = new BasicScenarioMusicTablePanel();
-		GridBagConstraints gbc__basicScenarioMusicPanel = new GridBagConstraints();
-		gbc__basicScenarioMusicPanel.insets = new Insets(0, 0, 5, 0);
-		gbc__basicScenarioMusicPanel.fill = GridBagConstraints.BOTH;
-		gbc__basicScenarioMusicPanel.gridx = 0;
-		gbc__basicScenarioMusicPanel.gridy = 0;
-		add(_basicScenarioMusicPanel, gbc__basicScenarioMusicPanel);
-		
-		_checkboxShuffle = new JCheckBox("Shuffle Playing");
-		_checkboxShuffle.setToolTipText("When checked, the music items will be shuffled on playing. Their playing order is randomized.");
-		GridBagConstraints gbc__checkboxShuffle = new GridBagConstraints();
+		_checkBoxRandomize = new JCheckBox("Shuffle Playing");
+		_checkBoxRandomize.setToolTipText("When checked, the music items will be shuffled on playing. Their playing order is randomized.");
+		final GridBagConstraints gbc__checkboxShuffle = new GridBagConstraints();
 		gbc__checkboxShuffle.fill = GridBagConstraints.BOTH;
 		gbc__checkboxShuffle.gridx = 0;
 		gbc__checkboxShuffle.gridy = 1;
-		add(_checkboxShuffle, gbc__checkboxShuffle);
+		_checkBoxRandomize.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(final ActionEvent event)
+			{
+				BasicScenarioMusicManagerPanel.this.isRandomizedChanged();
+			}
+		});
+		add(_checkBoxRandomize, gbc__checkboxShuffle);
 		
-		_scenarioManagerListener = new IScenarioManagerListener()
+		_dataListener = new IScenarioManagerListener()
 		{
 			@Override
 			public void changed(final String property)
 			{
-				BasicScenarioMusicManagerPanel.this.onScenarioManagerChanged(property);
+				BasicScenarioMusicManagerPanel.this.dataChanged(property);
 			}
 		};
+	}
+	
+	/**
+	 * Event.
+	 */
+	private void isRandomizedChanged()
+	{
+		if (_data != null && _performChangeEvents)
+		{
+			_performChangeEvents = false;
+			_data.setRandomized(_checkBoxRandomize.isSelected());
+			_performChangeEvents = true;
+		}
 	}
 
 	/**
@@ -99,25 +110,44 @@ public class BasicScenarioMusicManagerPanel extends JPanel
 	 * 
 	 * @param property property
 	 */
-	private void onScenarioManagerChanged(final String property)
+	private void dataChanged(final String property)
 	{
-		if(MusicManager.PROPERTY_RANDOMIZED.equals(property))
+		if (_performChangeEvents)
 		{
-			//TODO: Changed
+			_performChangeEvents = false;
+			if ((property == null) || MusicManager.PROPERTY_RANDOMIZED.equals(property))
+			{
+				_checkBoxRandomize.setSelected(_data.isRandomized());
+			}
+			_performChangeEvents = true;
 		}
 	}
 
+	/**
+	 * Sets the model
+	 * 
+	 * @param data model
+	 */
 	public void setModel(final MusicManager data)
 	{
-		if(_data != null)
+		if (_data != data)
 		{
-			_data.removeListener(_scenarioManagerListener);
-		}
-		_data = data;
-		setEnabled(_data != null);
-		if(_data != null)
-		{
-			_data.addListener(_scenarioManagerListener);
+			if (_data != null)
+			{
+				_data.removeListener(_dataListener);
+
+				final MusicManager oldData = _data;
+				final boolean randomize = _checkBoxRandomize.isSelected();
+				oldData.setRandomized(randomize);
+			}
+			_data = data;
+			super.setModel(_data);
+			setEnabled(_data != null);
+			if (_data != null)
+			{
+				dataChanged(null);
+				_data.addListener(_dataListener);
+			}
 		}
 	}
 }

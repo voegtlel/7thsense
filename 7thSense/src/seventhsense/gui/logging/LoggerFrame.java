@@ -75,7 +75,7 @@ public class LoggerFrame //NOPMD
 	private final AttributeSet _messageExceptionSourceAttributeSet;
 	private final JPanel panel;
 	
-	private Handler _loggerHandler;
+	private final Handler _loggerHandler;
 	
 	private FileWriter _logfileWriter;
 	

@@ -42,6 +42,7 @@ import javax.swing.KeyStroke;
 
 import seventhsense.data.INode;
 import seventhsense.data.scenario.sound.IPlayable;
+import seventhsense.gui.ModelView;
 import seventhsense.gui.database.DatabaseView;
 import seventhsense.gui.database.INodeSelectionListener;
 import seventhsense.gui.player.SoundPlayer;
@@ -53,7 +54,7 @@ import seventhsense.gui.shortcut.ShortcutPanel;
  * @author Parallan
  *
  */
-public class PlaylistView extends JPanel
+public class PlaylistView extends ModelView<INode>
 {
 	/**
 	 * Default serial version
@@ -199,11 +200,7 @@ public class PlaylistView extends JPanel
 		}
 	}
 	
-	/**
-	 * Set the model
-	 * 
-	 * @param root model
-	 */
+	@Override
 	public void setModel(final INode root)
 	{
 		_databaseView.setModel(root);

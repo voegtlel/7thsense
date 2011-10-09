@@ -51,6 +51,7 @@ import seventhsense.data.scenario.sound.FadeType;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
 import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.gui.ModelView;
 import seventhsense.gui.file.MediaFilePanel;
 import seventhsense.gui.numberslider.NumberSlider;
 import seventhsense.gui.player.SoundPlayer;
@@ -61,7 +62,7 @@ import seventhsense.gui.player.SoundPlayer;
  * @author Parallan
  *
  */
-public class MusicView extends JPanel
+public class MusicView extends ModelView<MusicItem>
 {
 	/**
 	 * Default serial version
@@ -215,7 +216,7 @@ public class MusicView extends JPanel
 		_labelIntroSong.setEnabled(false);
 		_labelIntroSong.setToolTipText("When checked, this song may be played as first song");
 		_labelIntroSong.setIcon(new ImageIcon(MusicView.class.getResource("/seventhsense/resources/Intro_20.png")));
-		GridBagConstraints gbc_labelIntroSong = new GridBagConstraints();
+		final GridBagConstraints gbc_labelIntroSong = new GridBagConstraints();
 		gbc_labelIntroSong.fill = GridBagConstraints.BOTH;
 		gbc_labelIntroSong.insets = new Insets(0, 0, 5, 5);
 		gbc_labelIntroSong.gridx = 0;
@@ -245,7 +246,7 @@ public class MusicView extends JPanel
 		_labelLoopSong.setEnabled(false);
 		_labelLoopSong.setIcon(new ImageIcon(MusicView.class.getResource("/seventhsense/resources/Loop_20.png")));
 		_labelLoopSong.setToolTipText("When checked, this song may be played after the first song");
-		GridBagConstraints gbc_labelLoopSong = new GridBagConstraints();
+		final GridBagConstraints gbc_labelLoopSong = new GridBagConstraints();
 		gbc_labelLoopSong.fill = GridBagConstraints.BOTH;
 		gbc_labelLoopSong.insets = new Insets(0, 0, 5, 5);
 		gbc_labelLoopSong.gridx = 0;
@@ -428,10 +429,7 @@ public class MusicView extends JPanel
 		}
 	}
 
-	/**
-	 * Sets the model
-	 * @param data model
-	 */
+	@Override
 	public void setModel(final MusicItem data)
 	{
 		if (_data != data)

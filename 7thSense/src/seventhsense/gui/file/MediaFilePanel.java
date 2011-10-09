@@ -51,7 +51,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import seventhsense.data.FileReference;
+import seventhsense.data.INode;
 import seventhsense.data.eventlist.EventList;
+import seventhsense.gui.ModelView;
+
 import javax.swing.ImageIcon;
 
 /**

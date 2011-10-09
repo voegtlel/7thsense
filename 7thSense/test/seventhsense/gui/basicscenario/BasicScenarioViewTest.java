@@ -81,7 +81,7 @@ public class BasicScenarioViewTest
 	public static BasicScenarioNode getTestData()
 	{
 		final BasicScenarioNode data = new BasicScenarioNode("Scenario");
-		data.getMusicManager().setMusicRandomized(false);
+		data.getMusicManager().setRandomized(false);
 		data.getMusicManager().getList().add(new MusicItem(FadeType.NoFade, false, false, 0.5, new FileReference("C:\\temp")));
 		data.getMusicManager().getList().add(new MusicItem(FadeType.NoFade, false, false, 0.0, new FileReference("C:\\temp")));
 		data.getMusicManager().getList().add(new MusicItem(FadeType.NoFade, false, false, 1.0, new FileReference("C:\\temp")));

@@ -46,6 +46,7 @@ import seventhsense.data.FolderNode;
 import seventhsense.data.INode;
 import seventhsense.data.LinkNode;
 import seventhsense.data.scenario.basicscenario.BasicScenarioNode;
+import seventhsense.gui.ModelView;
 import seventhsense.gui.basicscenario.BasicScenarioView;
 import seventhsense.gui.database.DatabaseView;
 import seventhsense.gui.database.INodeSelectionListener;
@@ -57,7 +58,7 @@ import seventhsense.gui.file.NodeFile;
  * @author Parallan
  *
  */
-public class LibraryView extends JPanel
+public class LibraryView extends ModelView<INode>
 {
 
 	/**
@@ -269,6 +270,7 @@ public class LibraryView extends JPanel
 	 * 
 	 * @param root model
 	 */
+	@Override
 	public void setModel(final INode root)
 	{
 		_databaseView.setModel(root);

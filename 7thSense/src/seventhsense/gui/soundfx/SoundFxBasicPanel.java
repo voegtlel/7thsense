@@ -32,7 +32,6 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Panel;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -47,6 +46,7 @@ import seventhsense.data.FileReference;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.SoundFxItem;
 import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.gui.ModelView;
 import seventhsense.gui.file.MediaFilePanel;
 import seventhsense.gui.numberslider.NumberSlider;
 import seventhsense.gui.player.SoundPlayer;
@@ -58,7 +58,7 @@ import seventhsense.gui.timeslider.TimeSlider;
  * @author Parallan
  *
  */
-public class SoundFxBasicPanel extends Panel
+public class SoundFxBasicPanel extends ModelView<SoundFxItem>
 {
 	/**
 	 * Default serial version
@@ -412,11 +412,7 @@ public class SoundFxBasicPanel extends Panel
 		}
 	}
 
-	/**
-	 * Set the model
-	 * 
-	 * @param data model
-	 */
+	@Override
 	public void setModel(final SoundFxItem data)
 	{
 		if (_data != data)

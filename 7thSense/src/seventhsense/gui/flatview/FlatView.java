@@ -27,10 +27,15 @@
  */
 package seventhsense.gui.flatview;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
 
 import seventhsense.data.INode;
+import seventhsense.gui.ModelView;
 
 /**
  * Represents the "flat" (list-) view of a tree
@@ -38,13 +43,15 @@ import seventhsense.data.INode;
  * @author Drag-On, Parallan
  *
  */
-public class FlatView extends JList
+public class FlatView extends ModelView<INode>
 {
 
 	/**
 	 * Default, required by Serializable (JList)
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final JList _list;
 	
 	private final FlatViewListModel _listModel;
 	
@@ -54,12 +61,26 @@ public class FlatView extends JList
 	public FlatView()
 	{
 		super();
-		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
+		final GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+		
+		
+		_list = new JList();
+		_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		_listModel = new FlatViewListModel();
-		super.setModel(_listModel);
-		setDragEnabled(true);
-		setTransferHandler(new FlatViewTransferHandler(this));
+		_list.setModel(_listModel);
+		_list.setDragEnabled(true);
+		_list.setTransferHandler(new FlatViewTransferHandler(this));
+		final GridBagConstraints gbc_list = new GridBagConstraints();
+		gbc_list.fill = GridBagConstraints.BOTH;
+		gbc_list.gridx = 0;
+		gbc_list.gridy = 0;
+		add(_list, gbc_list);
 	}
 	
 	/**
@@ -67,6 +88,7 @@ public class FlatView extends JList
 	 * 
 	 * @param node node to use as root for the model
 	 */
+	@Override
 	public void setModel(final INode node)
 	{
 		_listModel.setModel(node);
@@ -81,12 +103,12 @@ public class FlatView extends JList
 	{
 		if(selectedNode == null)
 		{
-			this.getSelectionModel().clearSelection();
+			_list.getSelectionModel().clearSelection();
 		}
 		else
 		{
 			final int nodeIndex = _listModel.getListNodeIndex(selectedNode);
-			this.setSelectedIndex(nodeIndex);
+			_list.setSelectedIndex(nodeIndex);
 		}
 	}
 	
@@ -97,7 +119,7 @@ public class FlatView extends JList
 	 */
 	public INode getSelectedItem()
 	{
-		final int selectedIndex = getSelectedIndex();
+		final int selectedIndex = _list.getSelectedIndex();
 		if(selectedIndex == -1)
 		{
 			return null;
@@ -106,5 +128,15 @@ public class FlatView extends JList
 		{
 			return ((FlatViewEntry)_listModel.get(selectedIndex)).getNode();
 		}
+	}
+
+	/**
+	 * Adds a list selection listener
+	 * 
+	 * @param listener listener
+	 */
+	public void addListSelectionListener(final ListSelectionListener listener)
+	{
+		_list.getSelectionModel().addListSelectionListener(listener);
 	}
 }

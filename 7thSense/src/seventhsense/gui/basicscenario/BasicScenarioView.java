@@ -54,12 +54,8 @@ public class BasicScenarioView extends JPanel
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
-	private final BasicScenarioMusicTablePanel _musicPanel;
-	private final MusicView _musicView;
-	private final BasicScenarioSoundFxTablePanel _soundFxPanel;
-	private final SoundFxView _soundFxView;
-	private final JSplitPane _splitPaneMusic;
-	private final JSplitPane _splitPaneSoundFx;
+	private final BasicScenarioMusicManagerPanel _musicManagerPanel;
+	private final BasicScenarioSoundFxManagerPanel _soundFxManagerPanel;
 	private boolean _performSplitterChangeEvent = true;
 
 	/**
@@ -82,72 +78,38 @@ public class BasicScenarioView extends JPanel
 		gbc_tabbedPane.gridy = 0;
 		add(tabbedPane, gbc_tabbedPane);
 
-		_splitPaneMusic = new JSplitPane();
-		_splitPaneMusic.addPropertyChangeListener(new PropertyChangeListener() {
+		_musicManagerPanel = new BasicScenarioMusicManagerPanel();
+		_musicManagerPanel.addSplitterPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(final PropertyChangeEvent event) {
 				if(JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY.equals(event.getPropertyName()))
 				{
-					onSplitPaneMusicChanged();
+					onMusicSplitterChanged();
 				}
 			}
 		});
-		tabbedPane.addTab("Music", null, _splitPaneMusic, "View and edit music properties");
-		_splitPaneMusic.setDividerSize(10);
-		_splitPaneMusic.setOneTouchExpandable(true);
-		_splitPaneMusic.setResizeWeight(0.5);
-
-		_musicPanel = new BasicScenarioMusicTablePanel();
-		_musicPanel.addTableSelectionListener(new ListSelectionListener()
-		{
-			@Override
-			public void valueChanged(final ListSelectionEvent event)
-			{
-				BasicScenarioView.this.musicTableSelectionChanged();
-			}
-		});
-		_splitPaneMusic.setLeftComponent(_musicPanel);
-
-		_musicView = new MusicView();
-		_splitPaneMusic.setRightComponent(_musicView);
-
-		_splitPaneSoundFx = new JSplitPane();
-		_splitPaneSoundFx.addPropertyChangeListener(new PropertyChangeListener() {
+		tabbedPane.addTab("Music", null, _musicManagerPanel, null);
+		
+		_soundFxManagerPanel = new BasicScenarioSoundFxManagerPanel();
+		_soundFxManagerPanel.addSplitterPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(final PropertyChangeEvent event) {
 				if(JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY.equals(event.getPropertyName()))
 				{
-					onSplitPaneSoundFxChanged();
+					onSoundFxSplitterChanged();
 				}
 			}
 		});
-		_splitPaneSoundFx.setResizeWeight(0.5);
-		_splitPaneSoundFx.setOneTouchExpandable(true);
-		_splitPaneSoundFx.setDividerSize(10);
-		tabbedPane.addTab("Sound Effects", null, _splitPaneSoundFx, "View and edit sound effect properties");
-
-		_soundFxPanel = new BasicScenarioSoundFxTablePanel();
-		_soundFxPanel.addTableSelectionListener(new ListSelectionListener()
-		{
-			@Override
-			public void valueChanged(final ListSelectionEvent event)
-			{
-				BasicScenarioView.this.soundFxTableSelectionChanged();
-			}
-		});
-		_splitPaneSoundFx.setLeftComponent(_soundFxPanel);
-
-		_soundFxView = new SoundFxView();
-		_splitPaneSoundFx.setRightComponent(_soundFxView);
+		tabbedPane.addTab("Sound Effects", null, _soundFxManagerPanel, null);
 	}
 
 	/**
 	 * Event.
 	 */
-	private void onSplitPaneSoundFxChanged()
+	private void onSoundFxSplitterChanged()
 	{
 		if(_performSplitterChangeEvent)
 		{
 			_performSplitterChangeEvent = false;
-			_splitPaneMusic.setDividerLocation(_splitPaneSoundFx.getDividerLocation());
+			_musicManagerPanel.setDividerLocation(_soundFxManagerPanel.getDividerLocation());
 			_performSplitterChangeEvent = true;
 		}
 	}
@@ -155,30 +117,14 @@ public class BasicScenarioView extends JPanel
 	/**
 	 * Event.
 	 */
-	private void onSplitPaneMusicChanged()
+	private void onMusicSplitterChanged()
 	{
 		if(_performSplitterChangeEvent)
 		{
 			_performSplitterChangeEvent = false;
-			_splitPaneSoundFx.setDividerLocation(_splitPaneMusic.getDividerLocation());
+			_soundFxManagerPanel.setDividerLocation(_musicManagerPanel.getDividerLocation());
 			_performSplitterChangeEvent = true;
 		}
-	}
-
-	/**
-	 * Event.
-	 */
-	private void musicTableSelectionChanged()
-	{
-		_musicView.setModel(_musicPanel.getSelectedItem());
-	}
-
-	/**
-	 * Event.
-	 */
-	private void soundFxTableSelectionChanged()
-	{
-		_soundFxView.setModel(_soundFxPanel.getSelectedItem());
 	}
 
 	/**
@@ -188,7 +134,15 @@ public class BasicScenarioView extends JPanel
 	 */
 	public void setModel(final BasicScenarioNode data)
 	{
-		_musicPanel.setModel(data.getMusicManager().getList());
-		_soundFxPanel.setModel(data.getSoundFxManager().getList());
+		if(data == null)
+		{
+			_musicManagerPanel.setModel(null);
+			_soundFxManagerPanel.setModel(null);
+		}
+		else
+		{
+			_musicManagerPanel.setModel(data.getMusicManager());
+			_soundFxManagerPanel.setModel(data.getSoundFxManager());
+		}
 	}
 }
