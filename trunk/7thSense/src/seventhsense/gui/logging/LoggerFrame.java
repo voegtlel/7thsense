@@ -177,7 +177,7 @@ public class LoggerFrame //NOPMD
 	private void attachLogger()
 	{
 		GLOBAL_LOGGER.setUseParentHandlers(true);
-		//GLOBAL_LOGGER.setLevel(Level.FINE);
+		GLOBAL_LOGGER.setLevel(Level.INFO);
 		GLOBAL_LOGGER.addHandler(_loggerHandler);
 	}
 	

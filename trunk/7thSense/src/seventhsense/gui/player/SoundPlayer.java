@@ -38,7 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -51,7 +50,9 @@ import javax.swing.event.ChangeListener;
 import seventhsense.data.scenario.sound.DelayThread;
 import seventhsense.data.scenario.sound.IPlayable;
 import seventhsense.data.scenario.sound.SoundException;
+import seventhsense.data.scenario.sound.player.PlayerMixer;
 import seventhsense.gui.ModelView;
+import seventhsense.gui.numberslider.NumberSlider;
 import seventhsense.gui.timeslider.TimeSlider;
 import seventhsense.gui.timeslider.TimeSliderLinear;
 
@@ -85,7 +86,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 	/**
 	 * Mixer; everything connected to sound will need to pass here.
 	 */
-	private final Mixer _mixer;
+	private final PlayerMixer _mixer;
 	
 	/**
 	 * Seeker
@@ -98,6 +99,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 	private boolean _isSeeking = false;
 
 	private DelayThread _seekerThread;
+	private NumberSlider _numberSliderVolume;
 
 	/**
 	 * Constructor
@@ -105,7 +107,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 	public SoundPlayer()
 	{
 		super();
-		_mixer = AudioSystem.getMixer(null); // Get the system's default mixer
+		_mixer = new PlayerMixer(AudioSystem.getMixer(null)); // Get the system's default mixer
 		
 		addAncestorListener(new AncestorListener()
 		{
@@ -192,21 +194,21 @@ public class SoundPlayer extends ModelView<IPlayable>
 		gbc_buttonStop.gridy = 0;
 		add(buttonStop, gbc_buttonStop);
 
-		final JPanel panel = new JPanel();
-		panel.setEnabled(false);
-		final GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.insets = new Insets(0, 0, 5, 0);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridwidth = 5;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 1;
-		add(panel, gbc_panel);
-		final GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 0, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		panel.setLayout(gbl_panel);
+		final JPanel panelPlayOptions = new JPanel();
+		panelPlayOptions.setEnabled(false);
+		final GridBagConstraints gbc_panelPlayOptions = new GridBagConstraints();
+		gbc_panelPlayOptions.insets = new Insets(0, 0, 5, 0);
+		gbc_panelPlayOptions.fill = GridBagConstraints.BOTH;
+		gbc_panelPlayOptions.gridwidth = 5;
+		gbc_panelPlayOptions.gridx = 0;
+		gbc_panelPlayOptions.gridy = 1;
+		add(panelPlayOptions, gbc_panelPlayOptions);
+		final GridBagLayout gbl_panelPlayOptions = new GridBagLayout();
+		gbl_panelPlayOptions.columnWidths = new int[] { 0, 0, 0 };
+		gbl_panelPlayOptions.rowHeights = new int[] { 0, 0, 0 };
+		gbl_panelPlayOptions.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panelPlayOptions.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		panelPlayOptions.setLayout(gbl_panelPlayOptions);
 
 		final JLabel labelFadeTime = new JLabel("");
 		labelFadeTime.setToolTipText("Change the fade time used for sounds that fade");
@@ -214,20 +216,21 @@ public class SoundPlayer extends ModelView<IPlayable>
 		labelFadeTime.setEnabled(false);
 		final GridBagConstraints gbc_labelFadeTime = new GridBagConstraints();
 		gbc_labelFadeTime.fill = GridBagConstraints.HORIZONTAL;
-		gbc_labelFadeTime.insets = new Insets(0, 5, 0, 5);
+		gbc_labelFadeTime.insets = new Insets(0, 5, 5, 5);
 		gbc_labelFadeTime.gridx = 0;
 		gbc_labelFadeTime.gridy = 0;
-		panel.add(labelFadeTime, gbc_labelFadeTime);
+		panelPlayOptions.add(labelFadeTime, gbc_labelFadeTime);
 
 		_timeSliderFadeTime = new TimeSlider();
 		_timeSliderFadeTime.setToolTipText("Change the fade time used for sounds that fade");
 		labelFadeTime.setLabelFor(_timeSliderFadeTime);
 		_timeSliderFadeTime.setEnabled(false);
 		final GridBagConstraints gbc_timeSliderFadeTime = new GridBagConstraints();
+		gbc_timeSliderFadeTime.insets = new Insets(0, 0, 5, 0);
 		gbc_timeSliderFadeTime.fill = GridBagConstraints.BOTH;
 		gbc_timeSliderFadeTime.gridx = 1;
 		gbc_timeSliderFadeTime.gridy = 0;
-		panel.add(_timeSliderFadeTime, gbc_timeSliderFadeTime);
+		panelPlayOptions.add(_timeSliderFadeTime, gbc_timeSliderFadeTime);
 		_timeSliderFadeTime.setMaxInf(false);
 		_timeSliderFadeTime.setTimeRange(0.5, 10.0, 5.0);
 		_timeSliderFadeTime.setValue(2.0);
@@ -239,6 +242,37 @@ public class SoundPlayer extends ModelView<IPlayable>
 				onTimeSliderFadeChanged();
 			}
 		});
+		
+		final JLabel labelVolume = new JLabel("");
+		final GridBagConstraints gbc_labelVolume = new GridBagConstraints();
+		gbc_labelVolume.fill = GridBagConstraints.BOTH;
+		gbc_labelVolume.insets = new Insets(0, 0, 0, 5);
+		gbc_labelVolume.gridx = 0;
+		gbc_labelVolume.gridy = 1;
+		panelPlayOptions.add(labelVolume, gbc_labelVolume);
+		labelVolume.setIcon(new ImageIcon(SoundPlayer.class.getResource("/seventhsense/resources/Volume_20.png")));
+		labelVolume.setToolTipText("Change the global volume.");
+		labelVolume.setEnabled(false);
+		
+		_numberSliderVolume = new NumberSlider();
+		final GridBagConstraints gbc_numberSliderVolume = new GridBagConstraints();
+		gbc_numberSliderVolume.fill = GridBagConstraints.BOTH;
+		gbc_numberSliderVolume.gridx = 1;
+		gbc_numberSliderVolume.gridy = 1;
+		panelPlayOptions.add(_numberSliderVolume, gbc_numberSliderVolume);
+		_numberSliderVolume.setValue(100.0);
+		_numberSliderVolume.setRange(0, 100, 5);
+		_numberSliderVolume.setToolTipText("Change the fade time used for sounds that fade");
+		_numberSliderVolume.setEnabled(false);
+		_numberSliderVolume.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(final ChangeEvent e)
+			{
+				onNumberSliderVolumeChanged();
+			}
+		});
+		
 		
 		_timeSliderSeeker = new TimeSliderLinear();
 		_timeSliderSeeker.setToolTipText("Play time, used to seek the sound");
@@ -256,7 +290,6 @@ public class SoundPlayer extends ModelView<IPlayable>
 		});
 		final GridBagConstraints gbc__timeSliderSeek = new GridBagConstraints();
 		gbc__timeSliderSeek.gridwidth = 5;
-		gbc__timeSliderSeek.insets = new Insets(0, 0, 0, 5);
 		gbc__timeSliderSeek.fill = GridBagConstraints.BOTH;
 		gbc__timeSliderSeek.gridx = 0;
 		gbc__timeSliderSeek.gridy = 2;
@@ -320,10 +353,6 @@ public class SoundPlayer extends ModelView<IPlayable>
 	public void setModel(final IPlayable model)
 	{
 		_model = model;
-		if (_model != null)
-		{
-			_model.setMixer(_mixer);
-		}
 		setEnabled(model != null);
 	}
 
@@ -350,6 +379,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 			_playingModel.setMixer(null);
 		}
 		_playingModel = model;
+		_playingModel.setMixer(_mixer);
 		try
 		{
 			if (!_playingModel.isLoaded())
@@ -438,6 +468,14 @@ public class SoundPlayer extends ModelView<IPlayable>
 				pause();
 			}
 		}
+	}
+	
+	/**
+	 * Event.
+	 */
+	private void onNumberSliderVolumeChanged()
+	{
+		_mixer.setVolume(_numberSliderVolume.getValue() / 100.0);
 	}
 
 	/**

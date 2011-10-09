@@ -34,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import seventhsense.data.FileReference;
@@ -43,6 +42,7 @@ import seventhsense.data.eventlist.EventList;
 import seventhsense.data.scenario.sound.player.IPlayer;
 import seventhsense.data.scenario.sound.player.IPlayerFade;
 import seventhsense.data.scenario.sound.player.ISoundListener;
+import seventhsense.data.scenario.sound.player.PlayerMixer;
 import seventhsense.data.scenario.sound.player.SoundEventType;
 import seventhsense.data.scenario.sound.player.SoundThreadFactory;
 
@@ -118,7 +118,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	/**
 	 * Mixer
 	 */
-	private transient Mixer _mixer;
+	private transient PlayerMixer _mixer;
 
 	/**
 	 * Default time for fading in
@@ -449,7 +449,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	}
 
 	@Override
-	public void setMixer(final Mixer mixer)
+	public void setMixer(final PlayerMixer mixer)
 	{
 		_mixer = mixer;
 	}
@@ -490,7 +490,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	{
 		for (ISoundItemListener<E> listener : _listeners.iterateEvents())
 		{
-			listener.changed((E) this, property);
+			listener.propertyChanged((E) this, property);
 		}
 	}
 

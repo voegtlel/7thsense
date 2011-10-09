@@ -37,7 +37,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -64,7 +63,7 @@ public class SoundThreadFactory
 	/**
 	 * Mixer used for creating the line
 	 */
-	private final Mixer _mixer;
+	private final PlayerMixer _mixer;
 
 	/**
 	 * Format for the line
@@ -89,7 +88,7 @@ public class SoundThreadFactory
 	 * @param mixer mixer to use
 	 * @throws SoundException
 	 */
-	public SoundThreadFactory(final File file, final Mixer mixer) throws SoundException
+	public SoundThreadFactory(final File file, final PlayerMixer mixer) throws SoundException
 	{
 		LOGGER.log(Level.FINE, "Create (" + file + ")");
 		_file = file;
@@ -134,28 +133,6 @@ public class SoundThreadFactory
 	}
 	
 	/**
-	 * Creates a destination line for audio data
-	 * 
-	 * @return new source data line with a fitting audio format
-	 * @throws SoundException
-	 */
-	private SourceDataLine createLine() throws SoundException
-	{
-		try
-		{
-			final SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, _decodedFormat, _bufferSize);
-			LOGGER.log(Level.FINER, "Line Info: " + info);
-			final SourceDataLine line = (SourceDataLine) _mixer.getLine(info);
-			line.open(_decodedFormat, _bufferSize);
-			return line;
-		}
-		catch (LineUnavailableException e)
-		{
-			throw new SoundException(e);
-		}
-	}
-	
-	/**
 	 * Creates a separated player for the file
 	 * 
 	 * @return a new player
@@ -163,7 +140,7 @@ public class SoundThreadFactory
 	 */
 	public IPlayer createFilePlayer() throws SoundException
 	{
-		return new SoundFile(_file, _fileFormat, createLine());
+		return new SoundFile(_file, _fileFormat, _mixer.createLine(_decodedFormat, _bufferSize));
 	}
 	
 	/**
@@ -174,6 +151,6 @@ public class SoundThreadFactory
 	 */
 	public IPlayerFade createFilePlayerFade() throws SoundException
 	{
-		return new SoundFadeFile(new SoundFile(_file, _fileFormat, createLine()));
+		return new SoundFadeFile(new SoundFile(_file, _fileFormat, _mixer.createLine(_decodedFormat, _bufferSize)));
 	}
 }

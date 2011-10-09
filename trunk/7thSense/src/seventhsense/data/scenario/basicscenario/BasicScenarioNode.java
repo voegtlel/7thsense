@@ -32,8 +32,6 @@ import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.sampled.Mixer;
-
 import seventhsense.data.INode;
 import seventhsense.data.listenerlist.IListItemListener;
 import seventhsense.data.listenerlist.IListenerList;
@@ -42,6 +40,7 @@ import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
 import seventhsense.data.scenario.sound.SoundException;
 import seventhsense.data.scenario.sound.SoundFxItem;
+import seventhsense.data.scenario.sound.player.PlayerMixer;
 import seventhsense.data.scenario.sound.player.SoundEventType;
 
 /**
@@ -176,7 +175,7 @@ public class BasicScenarioNode extends AbstractScenarioNode
 	}
 
 	@Override
-	public void setMixer(Mixer mixer)
+	public void setMixer(final PlayerMixer mixer)
 	{
 		_musicManager.setMixer(mixer);
 		_soundFxManager.setMixer(mixer);
@@ -258,7 +257,7 @@ public class BasicScenarioNode extends AbstractScenarioNode
 			}
 
 			@Override
-			public void changed(final MusicItem item, final String property)
+			public void propertyChanged(final MusicItem item, final String property)
 			{
 				if ("file".equals(property))
 				{
@@ -290,7 +289,7 @@ public class BasicScenarioNode extends AbstractScenarioNode
 			}
 
 			@Override
-			public void changed(final SoundFxItem item, final String property)
+			public void propertyChanged(final SoundFxItem item, final String property)
 			{
 				if ("file".equals(property))
 				{
