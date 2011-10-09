@@ -27,7 +27,7 @@
  */
 package seventhsense.data.scenario.sound;
 
-import javax.sound.sampled.Mixer;
+import seventhsense.data.scenario.sound.player.PlayerMixer;
 
 /**
  * This interface has been designed to match all the requirements that modern playable items need to be played back. But the best thing is: It's only 30$!
@@ -94,7 +94,7 @@ public interface IPlayable
 	 * 
 	 * @param mixer mixer to use for playing
 	 */
-	void setMixer(Mixer mixer);
+	void setMixer(PlayerMixer mixer);
 
 	/**
 	 * Sets the fade time

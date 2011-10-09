@@ -1,5 +1,5 @@
 /*
- * IScenarioListener.java
+ * IPropertyChangeListener.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -25,20 +25,22 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.basicscenario;
+package seventhsense.data;
 
 /**
- * Listener for scenario managers
+ * General property change listener for generic use.
  * 
  * @author Parallan
- *
+ * 
+ * @param <E> type of caller 
  */
-public interface IScenarioManagerListener
+public interface IPropertyChangedListener<E>
 {
 	/**
-	 * Fired, when a property of the scenario manager has changed
+	 * Fired when a property has changed.
 	 * 
-	 * @param property property that changed
+	 * @param caller the source object for the event and the object, on which the property was changed
+	 * @param property the property, that changed
 	 */
-	void changed(String property);
+	void propertyChanged(E caller, String property);
 }

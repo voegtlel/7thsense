@@ -30,17 +30,18 @@ package seventhsense.data.scenario.basicscenario;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.Mixer;
 
+import seventhsense.data.IPropertyChangedListener;
 import seventhsense.data.eventlist.EventList;
 import seventhsense.data.listenerlist.IListItemListener;
 import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.listenerlist.ListenerArrayList;
 import seventhsense.data.scenario.sound.AbstractSoundItem;
 import seventhsense.data.scenario.sound.ISoundItemListener;
+import seventhsense.data.scenario.sound.player.PlayerMixer;
 import seventhsense.data.scenario.sound.player.SoundEventType;
 
 /**
@@ -100,12 +101,12 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	/**
 	 * Mixer used for playing
 	 */
-	protected transient Mixer _mixer;
+	protected transient PlayerMixer _mixer;
 
 	/**
 	 * Listener list for events in a scenario manager
 	 */
-	private transient EventList<IScenarioManagerListener> _listeners;
+	private transient EventList<IPropertyChangedListener<AbstractScenarioManager<E>>> _listeners;
 
 	/**
 	 * Constructor
@@ -225,7 +226,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 * 
 	 * @param mixer new mixer
 	 */
-	public void setMixer(final Mixer mixer)
+	public void setMixer(final PlayerMixer mixer)
 	{
 		_mixer = mixer;
 	}
@@ -290,7 +291,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 * 
 	 * @param listener listener
 	 */
-	public void addListener(final IScenarioManagerListener listener)
+	public void addListener(final IPropertyChangedListener<AbstractScenarioManager<E>> listener)
 	{
 		_listeners.add(listener);
 	}
@@ -300,7 +301,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 * 
 	 * @param listener listener
 	 */
-	public void removeListener(final IScenarioManagerListener listener)
+	public void removeListener(final IPropertyChangedListener<AbstractScenarioManager<E>> listener)
 	{
 		_listeners.remove(listener);
 	}
@@ -315,7 +316,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	{
 		for (ISoundItemListener<E> listener : _itemListeners.iterateEvents())
 		{
-			listener.changed(item, property);
+			listener.propertyChanged(item, property);
 		}
 	}
 
@@ -340,9 +341,9 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 */
 	protected void fireChanged(final String property)
 	{
-		for (IScenarioManagerListener listener : _listeners.iterateEvents())
+		for (IPropertyChangedListener<AbstractScenarioManager<E>> listener : _listeners.iterateEvents())
 		{
-			listener.changed(property);
+			listener.propertyChanged(this, property);
 		}
 	}
 
@@ -360,7 +361,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	{
 		// initialize listener lists
 		_itemListeners = new EventList<ISoundItemListener<E>>();
-		_listeners = new EventList<IScenarioManagerListener>();
+		_listeners = new EventList<IPropertyChangedListener<AbstractScenarioManager<E>>>();
 
 		// initialize sound listener
 		_soundItemListener = new ISoundItemListener<E>()
@@ -372,7 +373,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 			}
 
 			@Override
-			public void changed(final E item, final String property)
+			public void propertyChanged(final E item, final String property)
 			{
 				onSoundChanged(item, property);
 			}

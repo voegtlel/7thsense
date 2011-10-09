@@ -74,17 +74,12 @@ public class SoundFile implements IPlayer
 	/**
 	 * The destination line for audio data
 	 */
-	private final SourceDataLine _line;
+	private final PlayerMixerLine _line;
 	
 	/**
 	 * The thread for playing
 	 */
 	private SoundThread _currentThread;
-	
-	/**
-	 * Control for volume
-	 */
-	private final FloatControl _gainControl;
 	
 	/**
 	 * Listener for sound thread
@@ -108,12 +103,11 @@ public class SoundFile implements IPlayer
 	 * @param fileFormat format of the sound file
 	 * @param line destination line for audio data
 	 */
-	public SoundFile(final File file, final AudioFileFormat fileFormat, final SourceDataLine line)
+	public SoundFile(final File file, final AudioFileFormat fileFormat, final PlayerMixerLine line)
 	{
 		_file = file;
 		_fileFormat = fileFormat;
 		_line = line;
-		_gainControl = (FloatControl) _line.getControl(FloatControl.Type.MASTER_GAIN);
 		_soundThreadListener = new ISoundListener<SoundThread>()
 		{
 			@Override
@@ -239,19 +233,13 @@ public class SoundFile implements IPlayer
 	@Override
 	public double getVolume()
 	{
-		final float gain = _gainControl.getValue();
-		final double value = Math.max(Math.min(Math.pow(VOLUME_EXPONENT, gain / VOLUME_MUL), 1), 0);
-		return _volumeFactor.getValueReverse(value);
+		return _line.getVolume();
 	}
 	
 	@Override
 	public void setVolume(final double volume)
 	{
-		final double volumeValue = Math.min(Math.max(_volumeFactor.getValue(volume), 0.0001), 1.0);
-		final float newVolume = (float) Math.min(Math.max(Math.log(volumeValue) / Math.log(VOLUME_EXPONENT) * VOLUME_MUL, _gainControl.getMinimum()), 0);
-		_gainControl.setValue(newVolume);
-		LOGGER.log(Level.FINEST, "set volume to " + (volume*100) + "% -> " + newVolume + " db");
-		fireEvent(SoundEventType.Volume);
+		_line.setVolume(volume);
 	}
 	
 	@Override

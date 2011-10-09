@@ -93,7 +93,7 @@ public class SoundFxBasicPanel extends ModelView<SoundFxItem>
 		_dataListener = new ISoundItemListener<SoundFxItem>()
 		{
 			@Override
-			public void changed(final SoundFxItem item, final String property)
+			public void propertyChanged(final SoundFxItem item, final String property)
 			{
 				SoundFxBasicPanel.this.dataChanged(property);
 			}

@@ -101,7 +101,7 @@ public class MusicView extends ModelView<MusicItem>
 		_dataListener = new ISoundItemListener<MusicItem>()
 		{
 			@Override
-			public void changed(final MusicItem item, final String property)
+			public void propertyChanged(final MusicItem item, final String property)
 			{
 				MusicView.this.dataChanged(property);
 			}

@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.tritonus.share.sampled.file.TAudioFileFormat;
@@ -72,7 +71,7 @@ public class SoundThread
 	/**
 	 * The output-line
 	 */
-	private final SourceDataLine _line;
+	private final PlayerMixerLine _line;
 	
 	/**
 	 * the source-stream
@@ -127,7 +126,7 @@ public class SoundThread
 	 * @param line destination for audio data
 	 * @throws SoundException
 	 */
-	public SoundThread(final File file, final AudioFileFormat fileFormat, final SourceDataLine line) throws SoundException
+	public SoundThread(final File file, final AudioFileFormat fileFormat, final PlayerMixerLine line) throws SoundException
 	{
 		LOGGER.log(Level.FINE, "Create (" + file + ")");
 		_file = file;

@@ -438,7 +438,7 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 			}
 
 			@Override
-			public void changed(final MusicItem item, final String property)
+			public void propertyChanged(final MusicItem item, final String property)
 			{
 				// Not required
 			}

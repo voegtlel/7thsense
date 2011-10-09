@@ -29,6 +29,7 @@ package seventhsense.data.scenario.sound;
 
 import java.util.EventListener;
 
+import seventhsense.data.IPropertyChangedListener;
 import seventhsense.data.scenario.sound.player.SoundEventType;
 
 /**
@@ -38,16 +39,8 @@ import seventhsense.data.scenario.sound.player.SoundEventType;
  *
  * @param <E> listener for a sound item
  */
-public interface ISoundItemListener<E> extends EventListener
+public interface ISoundItemListener<E> extends EventListener, IPropertyChangedListener<E>
 {	
-	/**
-	 * fired, when the item was changed
-	 * 
-	 * @param item item, that was changed
-	 * @param property property, that was changed
-	 */
-	void changed(E item, String property);
-	
 	/**
 	 * fired, when a sound event occured
 	 * 

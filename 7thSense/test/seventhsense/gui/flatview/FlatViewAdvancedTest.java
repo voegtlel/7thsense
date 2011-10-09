@@ -34,7 +34,6 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.sampled.Mixer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -46,6 +45,7 @@ import seventhsense.data.FolderNode;
 import seventhsense.data.INode;
 import seventhsense.data.scenario.AbstractScenarioNode;
 import seventhsense.data.scenario.sound.SoundException;
+import seventhsense.data.scenario.sound.player.PlayerMixer;
 import seventhsense.gui.treeview.TreeView;
 
 public class FlatViewAdvancedTest
@@ -118,7 +118,7 @@ public class FlatViewAdvancedTest
 		}
 
 		@Override
-		public void setMixer(Mixer mixer)
+		public void setMixer(PlayerMixer mixer)
 		{
 			// TODO Auto-generated method stub
 			

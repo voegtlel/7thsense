@@ -122,6 +122,7 @@ public class SoundFadeFile implements IPlayerFade
 				onVolumeFxDone();
 			}
 		});
+		_volumeFx.setValue(0);
 		_fullVolume = file.getVolume();
 	}
 	

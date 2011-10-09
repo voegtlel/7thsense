@@ -33,7 +33,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 
-import seventhsense.data.scenario.basicscenario.IScenarioManagerListener;
+import seventhsense.data.IPropertyChangedListener;
+import seventhsense.data.scenario.basicscenario.AbstractScenarioManager;
 import seventhsense.data.scenario.basicscenario.MusicManager;
 import seventhsense.data.scenario.sound.MusicItem;
 import seventhsense.gui.music.MusicView;
@@ -53,7 +54,7 @@ public class BasicScenarioMusicManagerPanel extends AbstractBasicScenarioManager
 	
 	private final JCheckBox _checkBoxRandomize;
 	
-	private final transient IScenarioManagerListener _dataListener;
+	private final transient IPropertyChangedListener<AbstractScenarioManager<MusicItem>> _dataListener;
 	
 	private boolean _performChangeEvents = true;
 	
@@ -82,10 +83,10 @@ public class BasicScenarioMusicManagerPanel extends AbstractBasicScenarioManager
 		});
 		add(_checkBoxRandomize, gbc__checkboxShuffle);
 		
-		_dataListener = new IScenarioManagerListener()
+		_dataListener = new IPropertyChangedListener<AbstractScenarioManager<MusicItem>>()
 		{
 			@Override
-			public void changed(final String property)
+			public void propertyChanged(final AbstractScenarioManager<MusicItem> caller, final String property)
 			{
 				BasicScenarioMusicManagerPanel.this.dataChanged(property);
 			}

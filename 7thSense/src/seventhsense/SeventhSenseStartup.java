@@ -37,6 +37,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+import javax.sound.sampled.Port;
 import javax.swing.UIManager;
 
 import seventhsense.gui.MainWindow;
@@ -168,6 +173,7 @@ public class SeventhSenseStartup
 			logger = new LoggerFrame();
 		}
 		final LoggerFrame finalLogger = logger;
+		
 		final SeventhSenseStartup starter = new SeventhSenseStartup();
 		final MainWindow mainWindow = starter.createMainWindow();
 		mainWindow.addWindowListener(new WindowAdapter()
@@ -186,5 +192,4 @@ public class SeventhSenseStartup
 			finalLogger.setVisible(true);
 		}
 	}
-
 }

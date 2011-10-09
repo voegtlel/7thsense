@@ -85,7 +85,7 @@ public abstract class AbstractBasicScenarioTableModel<E extends AbstractSoundIte
 		_soundItemListener = new ISoundItemListener<E>()
 		{
 			@Override
-			public void changed(final E item, final String property)
+			public void propertyChanged(final E item, final String property)
 			{
 				AbstractBasicScenarioTableModel.this.basicScenarioSoundChanged(item);
 			}
