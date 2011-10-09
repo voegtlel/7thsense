@@ -93,6 +93,7 @@
 
 = Todo =
   * "Del" key where transfer handlers are enabled instead of ctrl-x
+  * Add class around FadeSoundItem to ensure replay can be faded
   * For future:
     * Context dependent help
     * Fade in/out for sfx?
