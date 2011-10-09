@@ -105,7 +105,7 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	/**
 	 * Listener list for events in a scenario manager
 	 */
-	private final EventList<IScenarioManagerListener> _listeners = new EventList<IScenarioManagerListener>();
+	private transient EventList<IScenarioManagerListener> _listeners;
 
 	/**
 	 * Constructor
@@ -358,8 +358,9 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 */
 	private void initialize()
 	{
-		// initialize listener list
+		// initialize listener lists
 		_itemListeners = new EventList<ISoundItemListener<E>>();
+		_listeners = new EventList<IScenarioManagerListener>();
 
 		// initialize sound listener
 		_soundItemListener = new ISoundItemListener<E>()
