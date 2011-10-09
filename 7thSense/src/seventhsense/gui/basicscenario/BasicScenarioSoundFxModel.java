@@ -43,7 +43,7 @@ import seventhsense.data.scenario.sound.player.SoundEventType;
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxModel extends AbstractTableModel
+public class BasicScenarioSoundFxModel extends AbstractBasicScenarioTableModel<SoundFxItem>
 {
 	/**
 	 * Default serial version
@@ -54,47 +54,6 @@ public class BasicScenarioSoundFxModel extends AbstractTableModel
 			"Init Script", "Finish Script" };
 	private static final Class<?>[] COLUMN_CLASSES = new Class<?>[] { FileReference.class, Double.class, Double.class, Double.class, String.class,
 			Boolean.class, Boolean.class };
-
-	private BasicScenarioNode _data;
-	private final transient IListItemListener<SoundFxItem> _listener;
-	private final transient ISoundItemListener<SoundFxItem> _soundFxItemListener;
-
-	/**
-	 * Creates the model for sound fx items
-	 */
-	public BasicScenarioSoundFxModel()
-	{
-		super();
-		_listener = new IListItemListener<SoundFxItem>()
-		{
-			@Override
-			public void itemRemoved(final IListenerList<SoundFxItem> list, final int index, final SoundFxItem item)
-			{
-				BasicScenarioSoundFxModel.this.listItemRemoved(index, item);
-			}
-
-			@Override
-			public void itemAdded(final IListenerList<SoundFxItem> list, final int index, final SoundFxItem item)
-			{
-				BasicScenarioSoundFxModel.this.listItemAdded(index, item);
-			}
-		};
-		_soundFxItemListener = new ISoundItemListener<SoundFxItem>()
-		{
-			@Override
-			public void changed(final SoundFxItem item, final String property)
-			{
-				BasicScenarioSoundFxModel.this.basicScenarioSoundFxChanged(item);
-			}
-
-			@Override
-			public void soundEvent(final SoundFxItem soundFxItem, final SoundEventType event)
-			{
-				// TODO Auto-generated method stub
-
-			}
-		};
-	}
 
 	@Override
 	public int getColumnCount()
@@ -115,105 +74,26 @@ public class BasicScenarioSoundFxModel extends AbstractTableModel
 	}
 
 	@Override
-	public int getRowCount()
-	{
-		if (_data == null)
-		{
-			return 0;
-		}
-		return _data.getSoundFxManager().getList().size();
-	}
-
-	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex)
 	{
 		switch (columnIndex)
 		{
 		case 0:
-			return _data.getSoundFxManager().getList().get(rowIndex).getFile();
+			return _data.get(rowIndex).getFile();
 		case 1:
-			return _data.getSoundFxManager().getList().get(rowIndex).getMinReplayWaitTime();
+			return _data.get(rowIndex).getMinReplayWaitTime();
 		case 2:
-			return _data.getSoundFxManager().getList().get(rowIndex).getMaxReplayWaitTime();
+			return _data.get(rowIndex).getMaxReplayWaitTime();
 		case 3:
-			return _data.getSoundFxManager().getList().get(rowIndex).getVolume() * 100.0;
+			return _data.get(rowIndex).getVolume() * 100.0;
 		case 4:
-			return _data.getSoundFxManager().getList().get(rowIndex).getScriptName();
+			return _data.get(rowIndex).getScriptName();
 		case 5:
-			return _data.getSoundFxManager().getList().get(rowIndex).getInitScript() != null;
+			return _data.get(rowIndex).getInitScript() != null;
 		case 6:
-			return _data.getSoundFxManager().getList().get(rowIndex).getFinishScript() != null;
+			return _data.get(rowIndex).getFinishScript() != null;
 		default:
 			return null;
 		}
-	}
-
-	/**
-	 * Event
-	 * @param index index
-	 * @param item item
-	 */
-	private void listItemAdded(final int index, final SoundFxItem item)
-	{
-		this.fireTableRowsInserted(index, index);
-		item.addListener(_soundFxItemListener);
-	}
-
-	/**
-	 * Event
-	 * @param index index
-	 * @param item item
-	 */
-	private void listItemRemoved(final int index, final SoundFxItem item)
-	{
-		this.fireTableRowsDeleted(index, index);
-		item.removeListener(_soundFxItemListener);
-	}
-
-	/**
-	 * Event
-	 * @param item item
-	 */
-	private void basicScenarioSoundFxChanged(final SoundFxItem item)
-	{
-		final int index = _data.getSoundFxManager().getList().indexOf(item);
-		this.fireTableRowsUpdated(index, index);
-	}
-
-	/**
-	 * Sets the model
-	 * 
-	 * @param data model
-	 */
-	public void setModel(final BasicScenarioNode data)
-	{
-		if (_data != null)
-		{
-			_data.getSoundFxManager().getList().removeListener(_listener);
-			for (SoundFxItem item : _data.getSoundFxManager().getList())
-			{
-				item.removeListener(_soundFxItemListener);
-			}
-		}
-		_data = data;
-		if (_data != null)
-		{
-			_data.getSoundFxManager().getList().addListener(_listener);
-			for (SoundFxItem item : _data.getSoundFxManager().getList())
-			{
-				item.addListener(_soundFxItemListener);
-			}
-		}
-		this.fireTableDataChanged();
-	}
-
-	/**
-	 * returns the model
-	 * 
-	 * @return model
-	 */
-	public BasicScenarioNode getModel()
-	{
-		return _data;
 	}
 }

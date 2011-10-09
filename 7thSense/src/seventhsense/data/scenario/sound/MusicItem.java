@@ -38,6 +38,16 @@ import seventhsense.data.FileReference;
 public class MusicItem extends AbstractSoundItem<MusicItem>
 {
 	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_LOOP_SONG = "isLoopSong";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_INTRO_SONG = "isIntroSong";
+
+	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
@@ -95,7 +105,7 @@ public class MusicItem extends AbstractSoundItem<MusicItem>
 	public void setIsIntroSong(final boolean isIntroSong)
 	{
 		_isIntroSong = isIntroSong;
-		fireChanged("isIntroSong");
+		fireChanged(PROPERTY_INTRO_SONG);
 	}
 
 	/**
@@ -116,7 +126,7 @@ public class MusicItem extends AbstractSoundItem<MusicItem>
 	public void setIsLoopSong(final boolean isLoopSong)
 	{
 		_isLoopSong = isLoopSong;
-		fireChanged("isLoopSong");
+		fireChanged(PROPERTY_LOOP_SONG);
 	}
 
 	@Override

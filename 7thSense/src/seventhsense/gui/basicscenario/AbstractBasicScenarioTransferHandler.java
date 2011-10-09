@@ -38,8 +38,8 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
 
-import seventhsense.data.IItem;
 import seventhsense.data.listenerlist.IListenerList;
+import seventhsense.data.scenario.sound.AbstractSoundItem;
 
 /**
  * Abstract transfer handler for subitems of basic scenario
@@ -48,7 +48,7 @@ import seventhsense.data.listenerlist.IListenerList;
  *
  * @param <E> type of items
  */
-public abstract class AbstractBasicScenarioTransferHandler<E extends IItem> extends TransferHandler
+public abstract class AbstractBasicScenarioTransferHandler<E extends AbstractSoundItem<E>> extends TransferHandler
 {
 	/**
 	 * Logger
@@ -66,11 +66,6 @@ public abstract class AbstractBasicScenarioTransferHandler<E extends IItem> exte
 	protected IListenerList<E> _listenerList;
 
 	/**
-	 * The main panel to use
-	 */
-	protected final AbstractBasicScenarioTablePanel<E> _editorPanel;
-
-	/**
 	 * Flavor of this item
 	 */
 	protected final DataFlavor _flavor;
@@ -81,10 +76,9 @@ public abstract class AbstractBasicScenarioTransferHandler<E extends IItem> exte
 	 * @param editorPanel panel to operate on
 	 * @param flavor flavor of the item
 	 */
-	public AbstractBasicScenarioTransferHandler(final AbstractBasicScenarioTablePanel<E> editorPanel, final DataFlavor flavor)
+	public AbstractBasicScenarioTransferHandler(final DataFlavor flavor)
 	{
 		super();
-		_editorPanel = editorPanel;
 		_flavor = flavor;
 	}
 	
@@ -134,7 +128,7 @@ public abstract class AbstractBasicScenarioTransferHandler<E extends IItem> exte
 				}
 				else
 				{
-					final E destinationItem = _editorPanel.getSelectedItem();
+					final E destinationItem = ((AbstractBasicScenarioTablePanel<E>)support.getComponent()).getSelectedItem();
 					insertIndex = _listenerList.indexOf(destinationItem) + 1;
 				}
 				for(E importItem : transferData)

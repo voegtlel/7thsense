@@ -56,6 +56,21 @@ import seventhsense.data.scenario.sound.player.SoundThreadFactory;
 public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 {
 	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_VOLUME = "volume";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_FILE = "file";
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_FADE_TYPE = "fadeType";
+
+	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
@@ -148,7 +163,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	public void setFadeType(final FadeType fadeType)
 	{
 		_fadeType = fadeType;
-		fireChanged("fadeType");
+		fireChanged(PROPERTY_FADE_TYPE);
 	}
 
 	/**
@@ -169,7 +184,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	public void setFile(final FileReference file)
 	{
 		_file = file;
-		fireChanged("file");
+		fireChanged(PROPERTY_FILE);
 		if (_soundPlayer != null)
 		{
 			_soundPlayer.removeSoundListener(_soundListener);
@@ -208,7 +223,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 		{
 			_soundPlayer.setVolume(volume);
 		}
-		fireChanged("volume");
+		fireChanged(PROPERTY_VOLUME);
 	}
 
 	@Override

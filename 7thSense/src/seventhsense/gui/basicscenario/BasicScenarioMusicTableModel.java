@@ -1,5 +1,5 @@
 /*
- * BasicScenarioSoundFxTransferHandler.java
+ * BasicScenarioMusicModel.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -27,37 +27,68 @@
  */
 package seventhsense.gui.basicscenario;
 
-import java.awt.datatransfer.Transferable;
 
-import javax.swing.JComponent;
-
-import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.gui.transfer.SoundFxTransferable;
+import seventhsense.data.FileReference;
+import seventhsense.data.scenario.sound.FadeType;
+import seventhsense.data.scenario.sound.MusicItem;
 
 /**
- * Transfer handler for SoundFx items
+ * Model the the table of music items
  * 
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxTransferHandler extends AbstractBasicScenarioTransferHandler<SoundFxItem>
+public class BasicScenarioMusicTableModel extends AbstractBasicScenarioTableModel<MusicItem>
 {
 	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * Creates the SoundFx transfer handler
+	 * Names of columns
 	 */
-	public BasicScenarioSoundFxTransferHandler()
+	private static final String[] COLUMN_NAMES = new String[] { "Name", "Fade Type", "Intro", "Loop", "Volume (%)" };
+	/**
+	 * Classes of columns
+	 */
+	private static final Class<?>[] COLUMN_CLASSES = new Class<?>[] { FileReference.class, FadeType.class, Boolean.class, Boolean.class, Double.class };
+
+	@Override
+	public int getColumnCount()
 	{
-		super(SoundFxTransferable.SOUNDFX_TRANSFERABLE_FLAVOR);
+		return COLUMN_NAMES.length;
 	}
 
 	@Override
-	protected Transferable createTransferable(final JComponent c)
+	public String getColumnName(final int column)
 	{
-		return new SoundFxTransferable(new SoundFxItem[]{((BasicScenarioSoundFxPanel)c).getSelectedItem()});
+		return COLUMN_NAMES[column];
+	}
+
+	@Override
+	public Class<?> getColumnClass(final int columnIndex)
+	{
+		return COLUMN_CLASSES[columnIndex];
+	}
+
+	@Override
+	public Object getValueAt(final int rowIndex, final int columnIndex)
+	{
+		switch (columnIndex)
+		{
+		case 0:
+			return _data.get(rowIndex).getFile();
+		case 1:
+			return _data.get(rowIndex).getFadeType();
+		case 2:
+			return _data.get(rowIndex).isIntroSong();
+		case 3:
+			return _data.get(rowIndex).isLoopSong();
+		case 4:
+			return _data.get(rowIndex).getVolume() * 100.0;
+		default:
+			return null;
+		}
 	}
 }

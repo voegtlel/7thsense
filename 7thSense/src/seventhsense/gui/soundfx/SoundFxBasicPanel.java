@@ -392,19 +392,19 @@ public class SoundFxBasicPanel extends Panel
 		if (_performChangeEvents)
 		{
 			_performChangeEvents = false;
-			if ((property == null) || "file".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_FILE.equals(property))
 			{
 				_mediaFilePanel.setValue(_data.getFile());
 			}
-			if ((property == null) || "minReplayWaitTime".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_MIN_REPLAY_WAIT_TIME.equals(property))
 			{
 				_timeSliderMinimum.setValue(_data.getMinReplayWaitTime());
 			}
-			if ((property == null) || "maxReplayWaitTime".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_MAX_REPLAY_WAIT_TIME.equals(property))
 			{
 				_timeSliderMaximum.setValue(_data.getMaxReplayWaitTime());
 			}
-			if ((property == null) || "volume".equals(property))
+			if ((property == null) || SoundFxItem.PROPERTY_VOLUME.equals(property))
 			{
 				_sliderVolume.setValue(_data.getVolume() * 100.0);
 			}

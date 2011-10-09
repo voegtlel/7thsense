@@ -1,5 +1,5 @@
 /*
- * BasicScenarioSoundFxTransferHandler.java
+ * IScenarioListener.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -25,39 +25,20 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.gui.basicscenario;
-
-import java.awt.datatransfer.Transferable;
-
-import javax.swing.JComponent;
-
-import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.gui.transfer.SoundFxTransferable;
+package seventhsense.data.scenario.basicscenario;
 
 /**
- * Transfer handler for SoundFx items
+ * Listener for scenario managers
  * 
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxTransferHandler extends AbstractBasicScenarioTransferHandler<SoundFxItem>
+public interface IScenarioManagerListener
 {
 	/**
-	 * Default serial version
+	 * Fired, when a property of the scenario manager has changed
+	 * 
+	 * @param property property that changed
 	 */
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Creates the SoundFx transfer handler
-	 */
-	public BasicScenarioSoundFxTransferHandler()
-	{
-		super(SoundFxTransferable.SOUNDFX_TRANSFERABLE_FLAVOR);
-	}
-
-	@Override
-	protected Transferable createTransferable(final JComponent c)
-	{
-		return new SoundFxTransferable(new SoundFxItem[]{((BasicScenarioSoundFxPanel)c).getSelectedItem()});
-	}
+	void changed(String property);
 }

@@ -404,23 +404,23 @@ public class MusicView extends JPanel
 		if (_performChangeEvents)
 		{
 			_performChangeEvents = false;
-			if ((property == null) || "file".equals(property))
+			if ((property == null) || MusicItem.PROPERTY_FILE.equals(property))
 			{
 				_mediaFilePanel.setValue(_data.getFile());
 			}
-			if ((property == null) || "fadeType".equals(property))
+			if ((property == null) || MusicItem.PROPERTY_FADE_TYPE.equals(property))
 			{
 				_comboBoxFadeType.setSelectedItem(_data.getFadeType());
 			}
-			if ((property == null) || "isIntroSong".equals(property))
+			if ((property == null) || MusicItem.PROPERTY_INTRO_SONG.equals(property))
 			{
 				_checkBoxIsIntroSong.setSelected(_data.isIntroSong());
 			}
-			if ((property == null) || "isLoopSong".equals(property))
+			if ((property == null) || MusicItem.PROPERTY_LOOP_SONG.equals(property))
 			{
 				_checkBoxIsLoopSong.setSelected(_data.isLoopSong());
 			}
-			if ((property == null) || "volume".equals(property))
+			if ((property == null) || MusicItem.PROPERTY_VOLUME.equals(property))
 			{
 				_numberSliderVolume.setValue(_data.getVolume() * 100.0);
 			}

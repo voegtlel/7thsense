@@ -1,5 +1,5 @@
 /*
- * BasicScenarioSoundFxPanel.java
+ * BasicScenarioMusicPanel.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -29,16 +29,16 @@ package seventhsense.gui.basicscenario;
 
 import javax.swing.ImageIcon;
 
-import seventhsense.data.scenario.sound.SoundFxItem;
+import seventhsense.data.scenario.sound.MusicItem;
 import seventhsense.gui.table.TableHeaderIconCellRenderer;
 
 /**
- * Panel for a list of SoundFx items in BasicScenario
+ * Panel with a table of music items
  * 
  * @author Parallan
  *
  */
-public class BasicScenarioSoundFxPanel extends AbstractBasicScenarioTablePanel<SoundFxItem>
+public class BasicScenarioMusicTablePanel extends AbstractBasicScenarioTablePanel<MusicItem>
 {
 	/**
 	 * Default serial version
@@ -46,48 +46,42 @@ public class BasicScenarioSoundFxPanel extends AbstractBasicScenarioTablePanel<S
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Creates the panel
+	 * Creates the basic scenario music panel
 	 */
-	public BasicScenarioSoundFxPanel()
+	public BasicScenarioMusicTablePanel()
 	{
-		super(new BasicScenarioSoundFxModel(), new BasicScenarioSoundFxTransferHandler());
-
+		super(new BasicScenarioMusicTableModel(), new BasicScenarioMusicTableTransferHandler());
+		
 		_table.getColumnModel().getColumn(0).setHeaderRenderer(new TableHeaderIconCellRenderer(
 				_table.getTableHeader().getDefaultRenderer(),
 				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/Name_BG_20.png"))));
 		_table.getColumnModel().getColumn(1).setHeaderRenderer(new TableHeaderIconCellRenderer(
 				_table.getTableHeader().getDefaultRenderer(),
-				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/ReplayMinTime_BG_20.png"))));
+				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/FadeType_BG_20.png"))));
 		_table.getColumnModel().getColumn(2).setHeaderRenderer(new TableHeaderIconCellRenderer(
 				_table.getTableHeader().getDefaultRenderer(),
-				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/ReplayMaxTime_BG_20.png"))));
+				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/Intro_BG_20.png"))));
 		_table.getColumnModel().getColumn(3).setHeaderRenderer(new TableHeaderIconCellRenderer(
 				_table.getTableHeader().getDefaultRenderer(),
-				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/Volume_BG_20.png"))));
+				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/Loop_BG_20.png"))));
 		_table.getColumnModel().getColumn(4).setHeaderRenderer(new TableHeaderIconCellRenderer(
 				_table.getTableHeader().getDefaultRenderer(),
-				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/ScriptName_BG_20.png"))));
-		_table.getColumnModel().getColumn(5).setHeaderRenderer(new TableHeaderIconCellRenderer(
-				_table.getTableHeader().getDefaultRenderer(),
-				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/InitScript_BG_20.png"))));
-		_table.getColumnModel().getColumn(6).setHeaderRenderer(new TableHeaderIconCellRenderer(
-				_table.getTableHeader().getDefaultRenderer(),
-				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/FinishScript_BG_20.png"))));
+				new ImageIcon(BasicScenarioMusicTablePanel.class.getResource("/seventhsense/resources/Volume_BG_20.png"))));
 	}
 
 	@Override
 	protected void onAddAction()
 	{
-		final SoundFxItem newItem = new SoundFxItem();
+		final MusicItem newItem = new MusicItem();
 		_tableModel.getModel().add(newItem);
 		setSelectedItem(newItem);
 	}
-	
+
 	@Override
 	protected void onDeleteAction()
 	{
-		final SoundFxItem selectedItem = getSelectedItem();
-		if(selectedItem != null)
+		final MusicItem selectedItem = getSelectedItem();
+		if (selectedItem != null)
 		{
 			_tableModel.getModel().remove(selectedItem);
 		}

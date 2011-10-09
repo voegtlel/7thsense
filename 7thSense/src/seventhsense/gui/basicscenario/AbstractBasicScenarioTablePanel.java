@@ -33,6 +33,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -45,8 +46,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 import seventhsense.data.FileReference;
-import seventhsense.data.IItem;
-import seventhsense.data.scenario.basicscenario.BasicScenarioNode;
+import seventhsense.data.listenerlist.IListenerList;
+import seventhsense.data.scenario.sound.AbstractSoundItem;
 import seventhsense.gui.table.DisabledCheckboxCellRenderer;
 import seventhsense.gui.table.FileReferenceCellRenderer;
 import seventhsense.gui.table.TristateTableRowSorter;
@@ -57,7 +58,7 @@ import seventhsense.gui.table.TristateTableRowSorter;
  *
  * @param <E> type of item
  */
-public abstract class AbstractBasicScenarioTablePanel<E extends IItem> extends JPanel
+public abstract class AbstractBasicScenarioTablePanel<E extends AbstractSoundItem<E>> extends JPanel
 {
 	/**
 	 * Default serial version
@@ -70,13 +71,23 @@ public abstract class AbstractBasicScenarioTablePanel<E extends IItem> extends J
 	private final JButton _buttonDelete;
 	private final JButton _buttonUp;
 	private final JButton _buttonDown;
+	
+	protected final AbstractBasicScenarioTableModel<E> _tableModel;
+	protected final AbstractBasicScenarioTransferHandler<E> _transferHandler;
 
 	/**
 	 * Creates the basic scenario table panel
+	 * 
+	 * @param tableModel model for the table
+	 * @param transferHandler transfer handler for the table
 	 */
-	public AbstractBasicScenarioTablePanel()
+	public AbstractBasicScenarioTablePanel(final AbstractBasicScenarioTableModel<E> tableModel, final AbstractBasicScenarioTransferHandler<E> transferHandler)
 	{
 		super();
+		
+		_tableModel = tableModel;
+		_transferHandler = transferHandler;
+		
 		final GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0 };
@@ -165,7 +176,13 @@ public abstract class AbstractBasicScenarioTablePanel<E extends IItem> extends J
 			}
 		});
 		_rowSorter = new TristateTableRowSorter<TableModel>();
+		_table.setModel(_tableModel);
 		_table.setRowSorter(_rowSorter);
+		_table.setModel(_tableModel);
+		_rowSorter.setModel(_tableModel);
+		_table.setDragEnabled(true);
+		_table.setTransferHandler(_transferHandler);
+		_table.setDropMode(DropMode.INSERT_ROWS);
 		scrollPaneTable.setViewportView(_table);
 	}
 	
@@ -178,12 +195,6 @@ public abstract class AbstractBasicScenarioTablePanel<E extends IItem> extends J
 		_buttonUp.setEnabled(enabled && (_table.getSelectedRowCount() != 0));
 		_buttonDown.setEnabled(enabled && (_table.getSelectedRowCount() != 0));
 	}
-
-	/**
-	 * sets the model
-	 * @param data model data
-	 */
-	public abstract void setModel(final BasicScenarioNode data);
 
 	/**
 	 * adds a table listener
@@ -214,18 +225,59 @@ public abstract class AbstractBasicScenarioTablePanel<E extends IItem> extends J
 	}
 
 	/**
-	 * Gets the selected item
-	 * 
-	 * @return selected item
+	 * Sets the model
+	 * @param data model
 	 */
-	public abstract E getSelectedItem();
-	
+	public void setModel(final IListenerList<E> data)
+	{
+		_tableModel.setModel(data);
+		if (data == null)
+		{
+			setEnabled(false);
+			_transferHandler.setModel(null);
+		}
+		else
+		{
+			setEnabled(true);
+			_transferHandler.setModel(data);
+		}
+	}
+
+	/**
+	 * Returns the selected item
+	 * 
+	 * @return selected item or null
+	 */
+	public E getSelectedItem()
+	{
+		final int selectedRow = _table.getSelectedRow();
+		if (selectedRow == -1)
+		{
+			return null;
+		}
+		else
+		{
+			return _tableModel.getModel().get(_table.convertRowIndexToModel(selectedRow));
+		}
+	}
+
 	/**
 	 * Sets the selected item
 	 * 
-	 * @param item item to select
+	 * @param item selected item
 	 */
-	public abstract void setSelectedItem(E item);
+	public void setSelectedItem(final E item)
+	{
+		if (item == null)
+		{
+			_table.getSelectionModel().clearSelection();
+		}
+		else
+		{
+			final int selectedRow = _tableModel.getModel().indexOf(item);
+			_table.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+		}
+	}
 
 	/**
 	 * Event.
@@ -240,10 +292,36 @@ public abstract class AbstractBasicScenarioTablePanel<E extends IItem> extends J
 	/**
 	 * Event.
 	 */
-	protected abstract void onUpAction();
+	private void onUpAction()
+	{
+		final E selectedItem = getSelectedItem();
+		if (selectedItem != null)
+		{
+			final int oldIndex = _tableModel.getModel().indexOf(selectedItem);
+			if (oldIndex > 0)
+			{
+				_tableModel.getModel().remove(selectedItem);
+				_tableModel.getModel().add(oldIndex - 1, selectedItem);
+				setSelectedItem(selectedItem);
+			}
+		}
+	}
 
 	/**
 	 * Event.
 	 */
-	protected abstract void onDownAction();
+	private void onDownAction()
+	{
+		final E selectedItem = getSelectedItem();
+		if (selectedItem != null)
+		{
+			final int oldIndex = _tableModel.getModel().indexOf(selectedItem);
+			if (oldIndex < _tableModel.getModel().size() - 1)
+			{
+				_tableModel.getModel().remove(selectedItem);
+				_tableModel.getModel().add(oldIndex + 1, selectedItem);
+				setSelectedItem(selectedItem);
+			}
+		}
+	}
 }
