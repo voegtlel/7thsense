@@ -66,7 +66,8 @@
 		</jar>
 		<copy todir="${path.output}/${path.lib}">
 			<!-- Copy Libs -->
-			<path refid="path.classpath" />
+			<!--<path refid="path.classpath" />-->
+			<fileset dir="${path.lib}" />
 		</copy>
 		<copy todir="${path.output}">
 			<!-- Copy Licenses -->
