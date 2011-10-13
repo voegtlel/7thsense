@@ -299,7 +299,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 	/**
 	 * Event.
 	 */
-	protected void onAncestorAdded()
+	private void onAncestorAdded()
 	{
 		_seekerThread = new DelayThread(0.1, new Runnable()
 		{
@@ -322,7 +322,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 		{
 			_playingModel.setFadeTime(0.25);
 		}
-		stop();
+		play(null);
 		_seekerThread.stop();
 		_seekerThread = null;
 	}
@@ -374,36 +374,42 @@ public class SoundPlayer extends ModelView<IPlayable>
 	{
 		if ((_playingModel != null) && (_playingModel != model))
 		{
-			_playingModel.stop();
 			_playingModel.unload();
 			_playingModel.setMixer(null);
 		}
 		_playingModel = model;
-		_playingModel.setMixer(_mixer);
-		try
+		if(_playingModel != null)
 		{
-			if (!_playingModel.isLoaded())
+			_playingModel.setMixer(_mixer);
+			try
 			{
-				_playingModel.load();
+				if (!_playingModel.isLoaded())
+				{
+					_playingModel.load();
+				}
 			}
-		}
-		catch (SoundException e)
-		{
-			LOGGER.log(Level.SEVERE, e.toString(), e);
-		}
-		if (_playingModel.isLoaded())
-		{
-			LOGGER.log(Level.FINE, "duration: " + _playingModel.getDuration());
-			if(_playingModel.getDuration() > 0)
+			catch (SoundException e)
 			{
-				_timeSliderSeeker.setVisible(true);
+				LOGGER.log(Level.SEVERE, e.toString(), e);
+			}
+			if (_playingModel.isLoaded())
+			{
+				LOGGER.log(Level.FINE, "duration: " + _playingModel.getDuration());
+				if(_playingModel.getDuration() > 0)
+				{
+					_timeSliderSeeker.setVisible(true);
+				}
+				else
+				{
+					_timeSliderSeeker.setVisible(false);
+				}
+				_playingModel.setFadeTime(_timeSliderFadeTime.getValue());
+				_playingModel.play();
 			}
 			else
 			{
 				_timeSliderSeeker.setVisible(false);
 			}
-			_playingModel.setFadeTime(_timeSliderFadeTime.getValue());
-			_playingModel.play();
 		}
 		else
 		{

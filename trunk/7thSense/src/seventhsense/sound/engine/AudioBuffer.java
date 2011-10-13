@@ -74,13 +74,15 @@ public class AudioBuffer
 	
 	private int _lastBufferSize = 0;
 	
-	private ITransitionReversible _volumeFactor = new ExpTransition(20.0);
+	private final ITransitionReversible _volumeFactor = new ExpTransition(20.0);
 	
 	/**
-	 * 
+	 * Creates an audio buffer for draining and pushing data
 	 */
 	public AudioBuffer(final AL al, final IAudioInputStream sourceStream)
 	{
+		LOGGER.log(Level.FINE, "create AudioBuffer");
+		
 		_al = al;
 		_sourceStream = sourceStream;
 		

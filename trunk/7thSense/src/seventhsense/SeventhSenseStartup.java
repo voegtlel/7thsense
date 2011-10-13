@@ -145,6 +145,7 @@ public class SeventhSenseStartup
 			final List<String> debugArgs = arguments.get("log-fine");
 			for(String arg : debugArgs)
 			{
+				System.out.println("log-fine " + arg);//NOPMD
 				Logger.getLogger(arg).setLevel(Level.FINE);
 			}
 		}
@@ -154,6 +155,7 @@ public class SeventhSenseStartup
 			final List<String> debugArgs = arguments.get("log-all");
 			for(String arg : debugArgs)
 			{
+				System.out.println("log-all " + arg);//NOPMD
 				Logger.getLogger(arg).setLevel(Level.ALL);
 			}
 		}
