@@ -47,6 +47,7 @@ import seventhsense.gui.database.DatabaseView;
 import seventhsense.gui.database.INodeSelectionListener;
 import seventhsense.gui.player.SoundPlayer;
 import seventhsense.gui.shortcut.ShortcutPanel;
+import seventhsense.sound.engine.PlayerMixer;
 
 /**
  * View on the playlist
@@ -72,7 +73,7 @@ public class PlaylistView extends ModelView<INode>
 	/**
 	 * Creates the playlist view
 	 */
-	public PlaylistView()
+	public PlaylistView(final PlayerMixer mixer)
 	{
 		super();
 		
@@ -114,7 +115,7 @@ public class PlaylistView extends ModelView<INode>
 		gbl_panelRight.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panelRight.setLayout(gbl_panelRight);
 		
-		_soundPlayer = new SoundPlayer();
+		_soundPlayer = new SoundPlayer(mixer);
 		final GridBagConstraints gbc__soundPlayer = new GridBagConstraints();
 		gbc__soundPlayer.gridwidth = 2;
 		gbc__soundPlayer.insets = new Insets(0, 0, 5, 0);

@@ -35,7 +35,7 @@ import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.scenario.basicscenario.BasicScenarioNode;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.SoundEventType;
 
 /**
  * Model for SoundFx items in BasicScenario

@@ -25,23 +25,22 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
+package seventhsense.sound.engine;
 
-import java.util.logging.Level;
+import java.io.File;
 import java.util.logging.Logger;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.SourceDataLine;
 
 import seventhsense.data.IPropertyChangedListener;
 import seventhsense.data.eventlist.EventList;
-import seventhsense.data.scenario.sound.SoundException;
+import seventhsense.system.NativeLoader;
+
+import com.jogamp.openal.AL;
+import com.jogamp.openal.ALFactory;
+import com.jogamp.openal.util.ALut;
 
 /**
  * Class for the mixer used by the player
+ * TODO: Make singleton
  * 
  * @author Parallan
  *
@@ -59,9 +58,14 @@ public class PlayerMixer
 	private static final Logger LOGGER = Logger.getLogger(PlayerMixer.class.getName());
 	
 	/**
+	 * Native loader for the librarys
+	 */
+	private static NativeLoader __nativeLoader;
+	
+	/**
 	 * The mixer to manage
 	 */
-	private final Mixer _mixer;
+	private final AL _mixer;
 	
 	/**
 	 * Volume of mixer
@@ -76,33 +80,25 @@ public class PlayerMixer
 	/**
 	 * Creates a mixer for the player
 	 */
-	public PlayerMixer(final Mixer mixer)
+	public PlayerMixer()
 	{
-		_mixer = mixer;
+		if(__nativeLoader == null)
+		{
+			__nativeLoader = new NativeLoader(new File("lib"));
+			__nativeLoader.initializeNatives();
+		}
+		ALut.alutInit();
+		_mixer = ALFactory.getAL();
 	}
 	
 	/**
-	 * Creates a destination line for audio data
+	 * Gets the valid al instance
 	 * 
-	 * @param lineFormat format of the created source data line
-	 * @param bufferSize buffer size for audio data
-	 * @return new source data line with a fitting audio format
-	 * @throws SoundException
+	 * @return al instance
 	 */
-	public PlayerMixerLine createLine(final AudioFormat lineFormat, final int bufferSize) throws SoundException
+	public AL getAl()
 	{
-		try
-		{
-			final SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, lineFormat, bufferSize);
-			LOGGER.log(Level.FINER, "Line Info: " + info);
-			final SourceDataLine line = (SourceDataLine) _mixer.getLine(info);
-			line.open(lineFormat, bufferSize);
-			return new PlayerMixerLine(this, line);
-		}
-		catch (LineUnavailableException e)
-		{
-			throw new SoundException(e);
-		}
+		return _mixer;
 	}
 	
 	/**
@@ -158,5 +154,12 @@ public class PlayerMixer
 		{
 			listener.propertyChanged(this, property);
 		}
+	}
+	
+	@Override
+	protected void finalize() throws Throwable
+	{
+		ALut.alutExit();
+		super.finalize();
 	}
 }

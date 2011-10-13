@@ -44,9 +44,9 @@ import seventhsense.data.listenerlist.ListenerArrayList;
 import seventhsense.data.scenario.sound.DelayThread;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
-import seventhsense.data.scenario.sound.SoundException;
 import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.SoundEventType;
+import seventhsense.sound.engine.SoundException;
 
 /**
  * This class handles playback of sound effects

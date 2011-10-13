@@ -61,6 +61,7 @@ public class TimeSliderLinear extends JPanel
 	private final TimeSliderSpinnerModel _spinnerModel;
 	private final JSpinner _spinner;
 	
+	private double _value = 0;
 	private double _timeMinimum = 0;
 	private double _timeMaximum = 60.0;
 	
@@ -148,7 +149,7 @@ public class TimeSliderLinear extends JPanel
 	 */
 	private double getTimeFromSlider()
 	{
-		return _timeMinimum + ((double)_slider.getValue() / (double)_slider.getMaximum()) * (_timeMaximum - _timeMinimum);
+		return _timeMinimum + ((double)_slider.getValue() / (double)(_slider.getMaximum() + 1)) * (_timeMaximum - _timeMinimum);
 	}
 	
 	/**
@@ -164,7 +165,7 @@ public class TimeSliderLinear extends JPanel
 		}
 		else
 		{
-			_slider.setValue((int) ((double)_slider.getMaximum() * (time - _timeMinimum) / (_timeMaximum - _timeMinimum)));
+			_slider.setValue((int) ((double)(_slider.getMaximum() + 1) * (time - _timeMinimum) / (_timeMaximum - _timeMinimum)));
 		}
 	}
 	
@@ -176,11 +177,11 @@ public class TimeSliderLinear extends JPanel
 	{
 		if(!_isChanging)
 		{
-			final double newValue = getTimeFromSlider();
+			_value = getTimeFromSlider();
 			_isChanging = true;
-			_spinnerModel.setValue(newValue);
+			_spinnerModel.setValue(_value);
 			_isChanging = false;
-			LOGGER.log(Level.FINER, "sliderStateChanged: " + newValue);
+			LOGGER.log(Level.FINER, "sliderStateChanged: " + _value);
 			fireChangeListener();
 		}
 	}
@@ -193,14 +194,14 @@ public class TimeSliderLinear extends JPanel
 	{
 		if(!_isChanging)
 		{
-			final double newValue = _spinnerModel.getDoubleValue();
+			_value = _spinnerModel.getDoubleValue();
 			_isChanging = true;
 			if(!_slider.getValueIsAdjusting())
 			{
-				setTimeToSlider(newValue);
+				setTimeToSlider(_value);
 			}
 			_isChanging = false;
-			LOGGER.log(Level.FINER, "spinnerStateChanged: " + newValue);
+			LOGGER.log(Level.FINER, "spinnerStateChanged: " + _value);
 			fireChangeListener();
 		}
 	}
@@ -212,7 +213,7 @@ public class TimeSliderLinear extends JPanel
 	 */
 	public double getValue()
 	{
-		return _spinnerModel.getDoubleValue();
+		return _value;
 	}
 	
 	/**
@@ -222,7 +223,14 @@ public class TimeSliderLinear extends JPanel
 	 */
 	public void setValue(final double value)
 	{
+		_value = value;
+		_isChanging = true;
 		_spinnerModel.setValue(value);
+		if(!_slider.getValueIsAdjusting())
+		{
+			setTimeToSlider(value);
+		}
+		_isChanging = false;
 	}
 	
 	/**

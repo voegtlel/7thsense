@@ -1,5 +1,5 @@
 /*
- * IPlayerFade.java
+ * SoundFactory.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -25,28 +25,50 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
+package seventhsense.sound;
 
+import java.io.File;
+import java.io.IOException;
+
+import seventhsense.sound.engine.AudioBuffer;
+import seventhsense.sound.engine.AudioThread;
+import seventhsense.sound.engine.GlobalVolumeFilter;
+import seventhsense.sound.engine.IPlayer;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundException;
+import seventhsense.sound.engine.input.JavaSoundDecoderStream;
 
 /**
- * Interface for a sound-file player with fade-support
+ * Static class for creating a IPlayer from a file and a mixer
  * 
- * @author Parallan, Drag-On
+ * @author Parallan
  *
  */
-public interface IPlayerFade extends IPlayer
+public final class SoundFactory
 {
 	/**
-	 * Sets the time for fading
-	 * 
-	 * @param fadeTime fade time
+	 * Empty ctor
 	 */
-	void setFadeTime(double fadeTime);
+	private SoundFactory()
+	{
+		// Can't instantiate
+	}
 	
-	/**
-	 * Gets the current fade time
-	 * 
-	 * @return current fade time
-	 */
-	double getFadeTime();
+	public static IPlayer createPlayer(final File file, final PlayerMixer mixer) throws SoundException
+	{
+		try
+		{
+			return new GlobalVolumeFilter(mixer,
+					new AudioThread(
+							new AudioBuffer(mixer.getAl(),
+									new JavaSoundDecoderStream(file)
+							)
+						)
+					);
+		}
+		catch (IOException e)
+		{
+			throw new SoundException(e);
+		}
+	}
 }

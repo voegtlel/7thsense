@@ -25,7 +25,7 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
+package seventhsense.sound.engine;
 
 /**
  * Defines the type of sound event
@@ -78,5 +78,17 @@ public enum SoundEventType
 	/**
 	 * Sound file has played to its end
 	 */
-	Finished
+	Finished,
+	/**
+	 * Fired, when the sound thread has performed one step
+	 */
+	Update,
+	/**
+	 * Fired, when the item is closing  (only fired when fading)
+	 */
+	Closing,
+	/**
+	 * Fired, when the item was closed (fired after fading or when no fading is performed)
+	 */
+	Closed
 }

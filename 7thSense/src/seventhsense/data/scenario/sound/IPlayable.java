@@ -27,7 +27,8 @@
  */
 package seventhsense.data.scenario.sound;
 
-import seventhsense.data.scenario.sound.player.PlayerMixer;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundException;
 
 /**
  * This interface has been designed to match all the requirements that modern playable items need to be played back. But the best thing is: It's only 30$!

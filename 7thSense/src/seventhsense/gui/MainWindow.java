@@ -30,6 +30,8 @@ package seventhsense.gui;
 import javax.swing.JFrame;
 
 import seventhsense.gui.main.MainView;
+import seventhsense.sound.engine.PlayerMixer;
+
 import java.awt.Toolkit;
 
 /**
@@ -44,6 +46,8 @@ public class MainWindow extends JFrame
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final PlayerMixer _mixer;
 
 	/**
 	 * Create the application.
@@ -51,6 +55,9 @@ public class MainWindow extends JFrame
 	public MainWindow()
 	{
 		super();
+		
+		_mixer = new PlayerMixer();
+		
 		setTitle("7th Sense");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/seventhsense/resources/AppIcon_32.png")));
 		
@@ -58,7 +65,7 @@ public class MainWindow extends JFrame
 		this.setSize(800, 600);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		getContentPane().add(new MainView());
+		getContentPane().add(new MainView(_mixer));
 	}
 
 }

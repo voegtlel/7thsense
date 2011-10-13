@@ -39,8 +39,8 @@ import java.util.logging.Logger;
 
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
-import seventhsense.data.scenario.sound.SoundException;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.SoundEventType;
+import seventhsense.sound.engine.SoundException;
 
 /**
  * Manager for MusicItems

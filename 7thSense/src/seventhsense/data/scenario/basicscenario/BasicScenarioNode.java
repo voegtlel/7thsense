@@ -38,10 +38,10 @@ import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.scenario.AbstractScenarioNode;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
-import seventhsense.data.scenario.sound.SoundException;
 import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.data.scenario.sound.player.PlayerMixer;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundEventType;
+import seventhsense.sound.engine.SoundException;
 
 /**
  * Represents a basic scenario. Leaf node.

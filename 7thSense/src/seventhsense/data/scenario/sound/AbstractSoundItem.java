@@ -39,12 +39,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import seventhsense.data.FileReference;
 import seventhsense.data.IItem;
 import seventhsense.data.eventlist.EventList;
-import seventhsense.data.scenario.sound.player.IPlayer;
-import seventhsense.data.scenario.sound.player.IPlayerFade;
-import seventhsense.data.scenario.sound.player.ISoundListener;
-import seventhsense.data.scenario.sound.player.PlayerMixer;
-import seventhsense.data.scenario.sound.player.SoundEventType;
-import seventhsense.data.scenario.sound.player.SoundThreadFactory;
+import seventhsense.sound.SoundFactory;
+import seventhsense.sound.engine.IPlayer;
+import seventhsense.sound.engine.ISoundListener;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundEventType;
+import seventhsense.sound.engine.SoundException;
+import seventhsense.sound.fade.IPlayerFade;
+import seventhsense.sound.fade.SoundFadeFile;
 
 /**
  * Abstract class for sounds.
@@ -232,7 +234,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 		if (_soundPlayer == null)
 		{
 			LOGGER.log(Level.FINE, _file + " load");
-			_soundPlayer = new SoundThreadFactory(new File(_file.getPath()), _mixer).createFilePlayerFade();
+			_soundPlayer = new SoundFadeFile(SoundFactory.createPlayer(new File(_file.getPath()), _mixer));
 			_soundPlayer.setVolume(_volume);
 			_soundPlayer.addSoundListener(_soundListener);
 		}
@@ -254,7 +256,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 		if (_soundPlayer != null)
 		{
 			_soundPlayer.setFadeTime(fadeTime);
-			_soundPlayer.stop();
+			_soundPlayer.close();
 			_soundPlayer.removeSoundListener(_soundListener);
 			_soundPlayer = null;
 		}
@@ -401,7 +403,14 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	{
 		if (_soundPlayer != null)
 		{
-			_soundPlayer.resume();
+			try
+			{
+				_soundPlayer.resume();
+			}
+			catch (SoundException e)
+			{
+				LOGGER.log(Level.SEVERE, e.toString(), e);
+			}
 		}
 	}
 

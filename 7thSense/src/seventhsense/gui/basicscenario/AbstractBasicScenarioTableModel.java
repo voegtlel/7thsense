@@ -33,7 +33,7 @@ import seventhsense.data.listenerlist.IListItemListener;
 import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.scenario.sound.AbstractSoundItem;
 import seventhsense.data.scenario.sound.ISoundItemListener;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.SoundEventType;
 
 /**
  * @author Parallan

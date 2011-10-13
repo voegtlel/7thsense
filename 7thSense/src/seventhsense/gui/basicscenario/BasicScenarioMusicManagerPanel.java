@@ -38,6 +38,7 @@ import seventhsense.data.scenario.basicscenario.AbstractScenarioManager;
 import seventhsense.data.scenario.basicscenario.MusicManager;
 import seventhsense.data.scenario.sound.MusicItem;
 import seventhsense.gui.music.MusicView;
+import seventhsense.sound.engine.PlayerMixer;
 
 /**
  * Panel for BasicScenarioMusicManager
@@ -63,9 +64,9 @@ public class BasicScenarioMusicManagerPanel extends AbstractBasicScenarioManager
 	/**
 	 * 
 	 */
-	public BasicScenarioMusicManagerPanel()
+	public BasicScenarioMusicManagerPanel(final PlayerMixer mixer)
 	{
-		super(new BasicScenarioMusicTablePanel(), new MusicView());
+		super(new BasicScenarioMusicTablePanel(), new MusicView(mixer));
 		
 		_checkBoxRandomize = new JCheckBox("Shuffle Playing");
 		_checkBoxRandomize.setToolTipText("When checked, the music items will be shuffled on playing. Their playing order is randomized.");

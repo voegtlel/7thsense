@@ -36,6 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import seventhsense.gui.music.MusicViewTest;
+import seventhsense.sound.engine.PlayerMixer;
 
 public class PlaylistAdvancedTest
 {
@@ -91,7 +92,7 @@ public class PlaylistAdvancedTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final PlaylistView panel = new PlaylistView();
+		final PlaylistView panel = new PlaylistView(new PlayerMixer());
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 }
