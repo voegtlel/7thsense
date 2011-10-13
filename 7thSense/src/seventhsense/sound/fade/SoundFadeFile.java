@@ -27,6 +27,9 @@
  */
 package seventhsense.sound.fade;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import seventhsense.data.eventlist.EventList;
 import seventhsense.data.fx.Fx;
 import seventhsense.data.fx.IFxListener;
@@ -43,6 +46,11 @@ import seventhsense.sound.engine.SoundException;
  */
 public class SoundFadeFile implements IPlayerFade
 {
+	/**
+	 * Logger
+	 */
+	private static final Logger LOGGER = Logger.getLogger(SoundFadeFile.class.getName());
+	
 	/**
 	 * Default time for fading (play/stop/pause/resume)
 	 */
@@ -141,6 +149,7 @@ public class SoundFadeFile implements IPlayerFade
 		case FadeClosing: _file.close(); break;
 		default:
 		}
+		LOGGER.log(Level.FINE, "volume fx done: " + fadeState);
 	}
 
 	@Override
@@ -153,6 +162,7 @@ public class SoundFadeFile implements IPlayerFade
 			_volumeFx.start(volume, DEFAULT_FADETIME);
 		}
 		fireEvent(SoundEventType.Volume);
+		LOGGER.log(Level.FINE, "set volume " + volume);
 	}
 
 	@Override
@@ -162,6 +172,7 @@ public class SoundFadeFile implements IPlayerFade
 		_file.play();
 		_fadeState = FadeState.FadePlaying;
 		_volumeFx.start(_fullVolume, _fadeTime);
+		LOGGER.log(Level.FINE, "play");
 	}
 
 	@Override
@@ -178,6 +189,7 @@ public class SoundFadeFile implements IPlayerFade
 		fireEvent(SoundEventType.Pausing);
 		_fadeState = FadeState.FadePausing;
 		_volumeFx.start(0, DEFAULT_FADETIME);
+		LOGGER.log(Level.FINE, "pause");
 	}
 
 	@Override
@@ -187,6 +199,7 @@ public class SoundFadeFile implements IPlayerFade
 		_file.resume();
 		_fadeState = FadeState.FadeResuming;
 		_volumeFx.start(_fullVolume, DEFAULT_FADETIME);
+		LOGGER.log(Level.FINE, "resume");
 	}
 
 	@Override
@@ -267,5 +280,6 @@ public class SoundFadeFile implements IPlayerFade
 		fireEvent(SoundEventType.Closing);
 		_fadeState = FadeState.FadeClosing;
 		_volumeFx.start(0, _fadeTime);
+		LOGGER.log(Level.FINE, "close");
 	}
 }

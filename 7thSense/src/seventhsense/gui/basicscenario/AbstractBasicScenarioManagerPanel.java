@@ -100,7 +100,14 @@ public abstract class AbstractBasicScenarioManagerPanel<E extends AbstractSoundI
 	@Override
 	public void setModel(final F model)
 	{
-		_tablePanel.setModel(model.getList());
+		if(model == null)
+		{
+			_tablePanel.setModel(null);
+		}
+		else
+		{
+			_tablePanel.setModel(model.getList());
+		}
 	}
 
 	/**
