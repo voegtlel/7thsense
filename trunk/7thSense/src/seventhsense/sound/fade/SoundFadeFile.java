@@ -25,16 +25,17 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
-
-import java.util.logging.Level;
+package seventhsense.sound.fade;
 
 import seventhsense.data.eventlist.EventList;
 import seventhsense.data.fx.Fx;
 import seventhsense.data.fx.IFxListener;
 import seventhsense.data.fx.IFxSetter;
 import seventhsense.data.fx.transitions.LinearTransition;
-import seventhsense.data.scenario.sound.SoundException;
+import seventhsense.sound.engine.IPlayer;
+import seventhsense.sound.engine.ISoundListener;
+import seventhsense.sound.engine.SoundEventType;
+import seventhsense.sound.engine.SoundException;
 
 /**
  * This class plays a sound file with fading options
@@ -50,7 +51,7 @@ public class SoundFadeFile implements IPlayerFade
 	/**
 	 * The parent file to control
 	 */
-	private final SoundFile _file;
+	private final IPlayer _file;
 	/**
 	 * The fx for fading
 	 */
@@ -79,7 +80,7 @@ public class SoundFadeFile implements IPlayerFade
 	 * 
 	 * @param file base file
 	 */
-	public SoundFadeFile(final SoundFile file)
+	public SoundFadeFile(final IPlayer file)
 	{
 		_file = file;
 		_file.addSoundListener(new ISoundListener<IPlayer>()
@@ -137,6 +138,7 @@ public class SoundFadeFile implements IPlayerFade
 		{
 		case FadeStopping: _file.stop(); break;
 		case FadePausing: _file.pause(); break;
+		case FadeClosing: _file.close(); break;
 		default:
 		}
 	}
@@ -179,7 +181,7 @@ public class SoundFadeFile implements IPlayerFade
 	}
 
 	@Override
-	public void resume()
+	public void resume() throws SoundException
 	{
 		fireEvent(SoundEventType.Resuming);
 		_file.resume();
@@ -257,5 +259,13 @@ public class SoundFadeFile implements IPlayerFade
 	public void setFadeTime(final double fadeTime)
 	{
 		_fadeTime = fadeTime;
+	}
+	
+	@Override
+	public void close()
+	{
+		fireEvent(SoundEventType.Closing);
+		_fadeState = FadeState.FadeClosing;
+		_volumeFx.start(0, _fadeTime);
 	}
 }

@@ -49,12 +49,12 @@ import javax.swing.event.ChangeListener;
 
 import seventhsense.data.scenario.sound.DelayThread;
 import seventhsense.data.scenario.sound.IPlayable;
-import seventhsense.data.scenario.sound.SoundException;
-import seventhsense.data.scenario.sound.player.PlayerMixer;
 import seventhsense.gui.ModelView;
 import seventhsense.gui.numberslider.NumberSlider;
 import seventhsense.gui.timeslider.TimeSlider;
 import seventhsense.gui.timeslider.TimeSliderLinear;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundException;
 
 /**
  * This class serves as a Controller for the audio playback (some may call it a "player")
@@ -104,10 +104,10 @@ public class SoundPlayer extends ModelView<IPlayable>
 	/**
 	 * Constructor
 	 */
-	public SoundPlayer()
+	public SoundPlayer(final PlayerMixer mixer)
 	{
 		super();
-		_mixer = new PlayerMixer(AudioSystem.getMixer(null)); // Get the system's default mixer
+		_mixer = mixer; // Get the system's default mixer
 		
 		addAncestorListener(new AncestorListener()
 		{

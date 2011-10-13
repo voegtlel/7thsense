@@ -46,6 +46,7 @@ import javax.swing.UIManager;
 import seventhsense.data.FolderNode;
 import seventhsense.gui.library.LibraryView;
 import seventhsense.gui.library.LibraryViewTest;
+import seventhsense.sound.engine.PlayerMixer;
 
 public class SerializationLibraryTest extends JDialog
 {
@@ -143,7 +144,7 @@ public class SerializationLibraryTest extends JDialog
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		_panel = new LibraryView();
+		_panel = new LibraryView(new PlayerMixer());
 		frame.getContentPane().add(_panel, BorderLayout.CENTER);
 	}
 }

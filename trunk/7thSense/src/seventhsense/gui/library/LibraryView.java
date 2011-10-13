@@ -51,6 +51,7 @@ import seventhsense.gui.basicscenario.BasicScenarioView;
 import seventhsense.gui.database.DatabaseView;
 import seventhsense.gui.database.INodeSelectionListener;
 import seventhsense.gui.file.NodeFile;
+import seventhsense.sound.engine.PlayerMixer;
 
 /**
  * Panel for viewing the library inclusive a editor
@@ -74,7 +75,7 @@ public class LibraryView extends ModelView<INode>
 	/**
 	 * Creates a view for the library
 	 */
-	public LibraryView()
+	public LibraryView(final PlayerMixer mixer)
 	{
 		super();
 
@@ -138,7 +139,7 @@ public class LibraryView extends ModelView<INode>
 		gbl_panelDatabase.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		panelDatabase.setLayout(gbl_panelDatabase);
 		
-		_basicScenarioView = new BasicScenarioView();
+		_basicScenarioView = new BasicScenarioView(mixer);
 		splitPane.setRightComponent(_basicScenarioView);
 		splitPane.setLeftComponent(panelDatabase);
 

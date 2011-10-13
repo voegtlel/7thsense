@@ -44,6 +44,7 @@ import seventhsense.gui.library.LibraryView;
 import seventhsense.gui.playlist.PlaylistView;
 import seventhsense.gui.playlistmanager.PlaylistManagerView;
 import seventhsense.gui.tabbedpane.VerticalLabelIcon;
+import seventhsense.sound.engine.PlayerMixer;
 
 /**
  * Panel containing all elements
@@ -65,7 +66,7 @@ public class MainView extends JPanel
 	/**
 	 * Creates the main view
 	 */
-	public MainView()
+	public MainView(final PlayerMixer mixer)
 	{
 		super();
 		
@@ -104,7 +105,7 @@ public class MainView extends JPanel
 		gbc_tabbedPane.gridy = 0;
 		add(tabbedPane, gbc_tabbedPane);
 
-		_libraryView = new LibraryView();
+		_libraryView = new LibraryView(mixer);
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Library", true), _libraryView, null);
 		
 		_playlistManagerView = new PlaylistManagerView();
@@ -118,7 +119,7 @@ public class MainView extends JPanel
 		});
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Playlist Manager", true), _playlistManagerView, null);
 		
-		_playlistView = new PlaylistView();
+		_playlistView = new PlaylistView(mixer);
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Playlist", true), _playlistView, null);
 		
 		loadDefaultData();

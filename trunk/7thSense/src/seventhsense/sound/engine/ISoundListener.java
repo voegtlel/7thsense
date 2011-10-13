@@ -25,7 +25,8 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
+package seventhsense.sound.engine;
+
 
 
 /**

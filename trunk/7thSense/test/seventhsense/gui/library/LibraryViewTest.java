@@ -36,6 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import seventhsense.data.FolderNode;
+import seventhsense.sound.engine.PlayerMixer;
 
 public class LibraryViewTest
 {
@@ -91,7 +92,7 @@ public class LibraryViewTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		final LibraryView panel = new LibraryView();
+		final LibraryView panel = new LibraryView(new PlayerMixer());
 		panel.setModel(new FolderNode("root"));
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}

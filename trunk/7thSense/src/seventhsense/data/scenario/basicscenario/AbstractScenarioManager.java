@@ -41,8 +41,8 @@ import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.listenerlist.ListenerArrayList;
 import seventhsense.data.scenario.sound.AbstractSoundItem;
 import seventhsense.data.scenario.sound.ISoundItemListener;
-import seventhsense.data.scenario.sound.player.PlayerMixer;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundEventType;
 
 /**
  * Abstract class for scenario managers. Contains common methods.

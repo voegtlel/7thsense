@@ -30,6 +30,7 @@ package seventhsense.gui.basicscenario;
 import seventhsense.data.scenario.basicscenario.SoundFxManager;
 import seventhsense.data.scenario.sound.SoundFxItem;
 import seventhsense.gui.soundfx.SoundFxView;
+import seventhsense.sound.engine.PlayerMixer;
 
 /**
  * Panel for BasicScenarioSoundFxManager
@@ -49,9 +50,9 @@ public class BasicScenarioSoundFxManagerPanel extends AbstractBasicScenarioManag
 	/**
 	 * 
 	 */
-	public BasicScenarioSoundFxManagerPanel()
+	public BasicScenarioSoundFxManagerPanel(final PlayerMixer mixer)
 	{
-		super(new BasicScenarioSoundFxTablePanel(), new SoundFxView());
+		super(new BasicScenarioSoundFxTablePanel(), new SoundFxView(mixer));
 	}
 
 	/**

@@ -25,9 +25,8 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
+package seventhsense.sound.engine;
 
-import seventhsense.data.scenario.sound.SoundException;
 
 /**
  * Interface for a sound-file player
@@ -57,8 +56,10 @@ public interface IPlayer
 
 	/**
 	 * resume if paused
+	 * 
+	 * @throws SoundException 
 	 */
-	void resume();
+	void resume() throws SoundException;
 
 	/**
 	 * true, if the file is playing or paused
@@ -124,4 +125,9 @@ public interface IPlayer
 	 * @param listener listener
 	 */
 	void removeSoundListener(ISoundListener<IPlayer> listener);
+	
+	/**
+	 * Closes all assigned resources
+	 */
+	void close();
 }

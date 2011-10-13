@@ -35,6 +35,8 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import seventhsense.sound.engine.PlayerMixer;
+
 public class MainViewTest
 {
 	private static final Logger LOGGER = Logger.getLogger(MainViewTest.class.getName());
@@ -91,7 +93,7 @@ public class MainViewTest
 		frame.setSize(700, 500);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final MainView panel = new MainView();
+		final MainView panel = new MainView(new PlayerMixer());
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 

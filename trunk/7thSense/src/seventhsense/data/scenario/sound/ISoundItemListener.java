@@ -30,7 +30,7 @@ package seventhsense.data.scenario.sound;
 import java.util.EventListener;
 
 import seventhsense.data.IPropertyChangedListener;
-import seventhsense.data.scenario.sound.player.SoundEventType;
+import seventhsense.sound.engine.SoundEventType;
 
 /**
  * Listener class for sound items

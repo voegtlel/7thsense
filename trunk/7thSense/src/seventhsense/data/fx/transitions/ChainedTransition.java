@@ -1,5 +1,5 @@
 /*
- * SoundException.java
+ * EaseInOutTransition.java
  * 
  * Copyright (c) 2011 L.Voegtle, J. Moeller. All rights reserved.
  * 
@@ -25,57 +25,49 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound;
+package seventhsense.data.fx.transitions;
+
+import seventhsense.data.fx.ITransition;
+import seventhsense.data.fx.ITransitionReversible;
 
 /**
- * Class for exceptions when loading a sound file
+ * Provides exponential transition
  * 
- * @author Parallan, Drag-On
+ * @author Parallan
  *
  */
-public class SoundException extends Exception
+public class ChainedTransition implements ITransitionReversible
 {
 	/**
-	 * Default serial version
+	 * Transition used for the inner transition
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private final ITransition _transitionOuter;
 	/**
-	 * Creates a sound exception
+	 * Transition used for the outer transition
 	 */
-	public SoundException()
-	{
-		super();
-	}
+	private final ITransition _transitionInner;
 	
 	/**
-	 * Creates a sound exception
+	 * Creates a combined transition with easing in and easing out transitions combined with a transpose transition
 	 * 
-	 * @param message message
+	 * @param transitionInner transition used for inner transition
+	 * @param transitionOuter transition used for outer transition
 	 */
-	public SoundException(final String message)
+	public ChainedTransition(final ITransition transitionInner, final ITransition transitionOuter)
 	{
-		super(message);
+		_transitionInner = transitionInner;
+		_transitionOuter = transitionOuter;
 	}
 	
-	/**
-	 * Creates a sound exception
-	 * 
-	 * @param cause cause
-	 */
-	public SoundException(final Throwable cause)
+	@Override
+	public double getValue(final double value)
 	{
-		super(cause);
+		return _transitionOuter.getValue(_transitionInner.getValue(value));
 	}
 	
-	/**
-	 * Creates a sound exception
-	 * 
-	 * @param message message
-	 * @param cause cause
-	 */
-	public SoundException(final String message, final Throwable cause)
+	@Override
+	public double getValueReverse(final double value)
 	{
-		super(message, cause);
+		return ((ITransitionReversible)_transitionInner).getValueReverse(((ITransitionReversible)_transitionOuter).getValueReverse(value));
 	}
 }

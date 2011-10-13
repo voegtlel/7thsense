@@ -44,8 +44,8 @@ import javax.swing.UIManager;
 import seventhsense.data.FolderNode;
 import seventhsense.data.INode;
 import seventhsense.data.scenario.AbstractScenarioNode;
-import seventhsense.data.scenario.sound.SoundException;
-import seventhsense.data.scenario.sound.player.PlayerMixer;
+import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.sound.engine.SoundException;
 
 public class TreeViewAdvancedTest
 {

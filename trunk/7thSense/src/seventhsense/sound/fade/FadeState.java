@@ -25,7 +25,7 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data.scenario.sound.player;
+package seventhsense.sound.fade;
 
 /**
  * Enumeration for fade-states
@@ -58,5 +58,9 @@ enum FadeState
 	/**
 	 * After fading, the item has changed its volume
 	 */
-	FadeVolume
+	FadeVolume,
+	/**
+	 * After fading, the item should be closed
+	 */
+	FadeClosing
 }

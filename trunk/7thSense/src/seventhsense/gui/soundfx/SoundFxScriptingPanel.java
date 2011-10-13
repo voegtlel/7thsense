@@ -55,8 +55,8 @@ import javax.swing.event.DocumentListener;
 import seventhsense.data.scenario.ScriptItem;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.data.scenario.sound.player.SoundEventType;
 import seventhsense.gui.ModelView;
+import seventhsense.sound.engine.SoundEventType;
 
 /**
  * Panel for editing scripts

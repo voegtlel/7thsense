@@ -72,6 +72,8 @@ public class NumberSlider extends JPanel
 	 * Listeners for value changed
 	 */
 	private final EventList<ChangeListener> _changedListeners = new EventList<ChangeListener>();
+	
+	private double _value = 0;
 
 	/**
 	 * Create the panel.
@@ -140,7 +142,7 @@ public class NumberSlider extends JPanel
 		_spinnerModel.setMinimum(min);
 		_spinnerModel.setMaximum(max);
 		_spinnerModel.setStepSize(step);
-		setValueToSlider(_spinnerModel.getNumber().doubleValue());
+		setValueToSlider(_value);
 	}
 	
 	/**
@@ -150,7 +152,7 @@ public class NumberSlider extends JPanel
 	 */
 	private double getValueFromSlider()
 	{
-		return (Double)_spinnerModel.getMinimum() + ((double)_slider.getValue() / (double)_slider.getMaximum() * ((Double)_spinnerModel.getMaximum() - (Double)_spinnerModel.getMinimum()));
+		return (Double)_spinnerModel.getMinimum() + ((double)_slider.getValue() / (double)(_slider.getMaximum()) * ((Double)_spinnerModel.getMaximum() - (Double)_spinnerModel.getMinimum()));
 	}
 	
 	/**
@@ -160,7 +162,7 @@ public class NumberSlider extends JPanel
 	 */
 	private void setValueToSlider(final double value)
 	{
-		_slider.setValue((int)((value - (Double)_spinnerModel.getMinimum()) * (double)_slider.getMaximum() / ((Double)_spinnerModel.getMaximum() - (Double)_spinnerModel.getMinimum())));
+		_slider.setValue((int)((value - (Double)_spinnerModel.getMinimum()) * (double)(_slider.getMaximum()) / ((Double)_spinnerModel.getMaximum() - (Double)_spinnerModel.getMinimum())));
 	}
 
 	/**
@@ -171,11 +173,11 @@ public class NumberSlider extends JPanel
 	{
 		if(!_isChanging)
 		{
-			final double newValue = getValueFromSlider();
+			_value = getValueFromSlider();
 			_isChanging = true;
-			_spinnerModel.setValue(newValue);
+			_spinnerModel.setValue(_value);
 			_isChanging = false;
-			LOGGER.log(Level.FINER, "sliderStateChanged: " + newValue);
+			LOGGER.log(Level.FINER, "sliderStateChanged: " + _value);
 			fireChangeListener();
 		}
 	}
@@ -188,11 +190,14 @@ public class NumberSlider extends JPanel
 	{
 		if(!_isChanging)
 		{
-			final double newValue = _spinnerModel.getNumber().doubleValue();
+			_value = _spinnerModel.getNumber().doubleValue();
 			_isChanging = true;
-			setValueToSlider(newValue);
+			if(!_slider.getValueIsAdjusting())
+			{
+				setValueToSlider(_value);
+			}
 			_isChanging = false;
-			LOGGER.log(Level.FINER, "spinnerStateChanged: " + newValue);
+			LOGGER.log(Level.FINER, "spinnerStateChanged: " + _value);
 			fireChangeListener();
 		}
 	}
@@ -204,7 +209,7 @@ public class NumberSlider extends JPanel
 	 */
 	public double getValue()
 	{
-		return _spinnerModel.getNumber().doubleValue();
+		return _value;
 	}
 	
 	/**
@@ -214,7 +219,14 @@ public class NumberSlider extends JPanel
 	 */
 	public void setValue(final double value)
 	{
+		_isChanging = true;
+		_value = value;
 		_spinnerModel.setValue(value);
+		if(!_slider.getValueIsAdjusting())
+		{
+			setValueToSlider(value);
+		}
+		_isChanging = false;
 	}
 	
 	/**

@@ -35,6 +35,8 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import seventhsense.sound.engine.PlayerMixer;
+
 public class SoundFxViewTest
 {
 	private static final Logger LOGGER = Logger.getLogger(SoundFxViewTest.class.getName());
@@ -89,7 +91,7 @@ public class SoundFxViewTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final SoundFxView panel = new SoundFxView();
+		final SoundFxView panel = new SoundFxView(new PlayerMixer());
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 

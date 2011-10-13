@@ -33,6 +33,7 @@ import javax.swing.JTabbedPane;
 
 import seventhsense.data.scenario.sound.SoundFxItem;
 import seventhsense.gui.ModelView;
+import seventhsense.sound.engine.PlayerMixer;
 
 /**
  * Panel for editing SoundFx items
@@ -53,7 +54,7 @@ public class SoundFxView extends ModelView<SoundFxItem>
 	/**
 	 * Create the panel.
 	 */
-	public SoundFxView()
+	public SoundFxView(final PlayerMixer mixer)
 	{
 		super();
 		setLayout(new BorderLayout(0, 0));
@@ -62,7 +63,7 @@ public class SoundFxView extends ModelView<SoundFxItem>
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		add(tabbedPane);
 
-		_basicPanel = new SoundFxBasicPanel();
+		_basicPanel = new SoundFxBasicPanel(mixer);
 		tabbedPane.addTab("Basic", null, _basicPanel, "Basic properties for the sound effect");
 
 		_scriptingPanel = new SoundFxScriptingPanel();
