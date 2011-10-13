@@ -99,6 +99,10 @@ public class NativeLoader
         
 		_libraryFileGluegen = new File(_osLibPath + "/" + System.mapLibraryName("gluegen-rt"));
         _libraryFileJoal = new File(_osLibPath + "/" + System.mapLibraryName("joal"));
+        
+        LOGGER.log(Level.FINE, "Library Path: " + System.getProperty("java.library.path"));
+        LOGGER.log(Level.INFO, "Library Gluegen: " + _libraryFileGluegen.getAbsolutePath() + " (exists: " + _libraryFileGluegen.exists() + ")");
+        LOGGER.log(Level.INFO, "Library Joal: " + _libraryFileJoal.getAbsolutePath() + " (exists: " + _libraryFileGluegen.exists() + ")");
 	}
 	
 	/**
@@ -106,16 +110,13 @@ public class NativeLoader
 	 */
 	public void initializeNatives()
 	{
-		// Load native librarys
-		System.load(_libraryFileGluegen.getAbsolutePath());
-		System.load(_libraryFileJoal.getAbsolutePath());
-		
 		// Adjust native library path
 		
 		// Set global property
-		System.setProperty("java.library.path", System.getProperty("java.library.path") + ";" + _osLibPath.getPath());
+		System.setProperty("java.library.path", System.getProperty("java.library.path") + File.pathSeparator + _osLibPath.getAbsolutePath());
 
-		// Clear ClassLoader cache // Not required now
+		// Clear ClassLoader cache
+		// Hack java ClassLoader
 		try
 		{
 			final Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
@@ -138,6 +139,10 @@ public class NativeLoader
 		{
 			LOGGER.log(Level.SEVERE, e.toString(), e);
 		}
+	
+		// Load native librarys
+		System.load(_libraryFileGluegen.getAbsolutePath());
+		System.load(_libraryFileJoal.getAbsolutePath());
 	}
 	
 	/**
