@@ -89,7 +89,7 @@ public class CreditsPanelTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final CreditsPanel panel = new CreditsPanel();
+		final CreditsView panel = new CreditsView();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 

@@ -46,18 +46,18 @@ import javax.swing.event.HyperlinkListener;
  * @author Parallan, Drag-On
  *
  */
-public class CreditsPanel extends JPanel
+public class CreditsView extends JPanel
 {
 	/**
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(CreditsPanel.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(CreditsView.class.getName());
 
 	/**
 	 * Constructs the Credits panel
 	 */
-	public CreditsPanel()
+	public CreditsView()
 	{
 		super();
 		
@@ -78,7 +78,7 @@ public class CreditsPanel extends JPanel
 		editorPaneCredits.setOpaque(false);
 		try
 		{
-			editorPaneCredits.setPage(CreditsPanel.class.getResource("/seventhsense/resources/credits.html"));
+			editorPaneCredits.setPage(CreditsView.class.getResource("/seventhsense/resources/credits.html"));
 		}
 		catch (IOException e)
 		{
