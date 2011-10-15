@@ -39,6 +39,7 @@ import javax.swing.event.AncestorListener;
 
 import seventhsense.data.FolderNode;
 import seventhsense.data.INode;
+import seventhsense.gui.credits.CreditsView;
 import seventhsense.gui.file.NodeFile;
 import seventhsense.gui.library.LibraryView;
 import seventhsense.gui.playlist.PlaylistView;
@@ -62,6 +63,7 @@ public class MainView extends JPanel
 	private final LibraryView _libraryView;
 	private final PlaylistManagerView _playlistManagerView;
 	private final PlaylistView _playlistView;
+	private final CreditsView _creditView;
 
 	/**
 	 * Creates the main view
@@ -121,6 +123,9 @@ public class MainView extends JPanel
 		
 		_playlistView = new PlaylistView(mixer);
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Playlist", true), _playlistView, null);
+		
+		_creditView = new CreditsView();
+		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Credits", true), _creditView, null);
 		
 		loadDefaultData();
 	}
