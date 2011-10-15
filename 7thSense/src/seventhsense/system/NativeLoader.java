@@ -97,12 +97,27 @@ public class NativeLoader
         
         _osLibPath = new File(basePath, _osName + "-" + _osSystem);
         
-		_libraryFileGluegen = new File(_osLibPath + "/" + System.mapLibraryName("gluegen-rt"));
-        _libraryFileJoal = new File(_osLibPath + "/" + System.mapLibraryName("joal"));
+        
+        
+		_libraryFileGluegen = new File(getJarPath(), _osLibPath + "/" + System.mapLibraryName("gluegen-rt"));
+        _libraryFileJoal = new File(getJarPath(), _osLibPath + "/" + System.mapLibraryName("joal"));
         
         LOGGER.log(Level.FINE, "Library Path: " + System.getProperty("java.library.path"));
         LOGGER.log(Level.INFO, "Library Gluegen: " + _libraryFileGluegen.getAbsolutePath() + " (exists: " + _libraryFileGluegen.exists() + ")");
         LOGGER.log(Level.INFO, "Library Joal: " + _libraryFileJoal.getAbsolutePath() + " (exists: " + _libraryFileGluegen.exists() + ")");
+	}
+	
+	/**
+	 * Gets the path (the containing directory) of this jar
+	 * 
+	 * @return path to directory containing this jar
+	 */
+	private static File getJarPath()
+	{
+		final File jarFile = new File(NativeLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+		
+		final File absolutePath = jarFile.getAbsoluteFile();
+		return absolutePath.getParentFile();
 	}
 	
 	/**
@@ -146,7 +161,7 @@ public class NativeLoader
 	}
 	
 	/**
-	 * Calls the given main class
+	 * Calls the given main class per reflection
 	 * 
 	 * @param classname name of the class
 	 * @param args program arguments
