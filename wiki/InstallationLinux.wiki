@@ -8,11 +8,14 @@
   * Open the *"Open with"* tab and choose *"OpenJDK Java 6 Runtime"*. If there is no such entry you need to install Java first - see the appropriate entry in this wiki.
 Now you can run the program by double clicking *"seventhsense.jar"*.
 
+If there are issues with sound playback you need to install libopenal. See step 1 and 2 at *Other Linux*.
+
 
 = Other Linux =
   * Open up a terminal.
-  * Execute _unzip -d *`*`directory`*`* seventhsense-`*`.zip_ (where "`*`" is the current build no.) and `*`directory`*` is a path somewhere on your hard disc. If you're unsure use _/home/*yourName*/Documents/7thSense_.
-  * Execute _cd `*`directory`*`_ (eg. _cd /home/*yourName*/Documents/7thSense/_).
+  * Execute _sudo apt-get install libopenal1_
+  * Execute _cd *`*`directory`*`*_ (eg. _cd /home/*yourName*/Documents/7thSense/_).
+  * Execute _unzip -d seventhsense-`*`.zip_ (where "`*`" is the current build no.).
   * Execute _chmod +x seventhsense.jar_.
   * Right click *"seventhsense.jar"* and choose *"Open with OpenJDK Java 6 Runtime"*.
 
@@ -21,3 +24,6 @@ Now you can run the program by double clicking *"seventhsense.jar"*.
 == Ubuntu ==
   * Open up *Ubuntu Software Center* and search for *"Java"*.
   * Choose *"OpenJDK Java 6 Runtime"* and click on *"Install"*.
+
+== Other Linux ==
+  * See [http://www.java.com/en/download/help/linux_install.xml Java Homepage].
