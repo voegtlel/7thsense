@@ -31,6 +31,7 @@ import javax.swing.JFrame;
 
 import seventhsense.gui.main.MainView;
 import seventhsense.sound.engine.PlayerMixer;
+import seventhsense.system.Version;
 
 import java.awt.Toolkit;
 
@@ -58,7 +59,7 @@ public class MainWindow extends JFrame
 		
 		_mixer = new PlayerMixer();
 		
-		setTitle("7th Sense");
+		setTitle("7th Sense | " + Version.fromFile().toString());
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/seventhsense/resources/AppIcon_32.png")));
 		
 		this.setLocationByPlatform(true);

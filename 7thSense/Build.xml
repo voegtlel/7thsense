@@ -37,6 +37,15 @@
 		</delete>
 	</target>
 	
+	<!-- write properties (currently only build number) -->
+	<propertyfile
+	    file="Properties.txt"
+	    comment="Properties of 7thSense">
+	  <entry  key="minor" type="int" default="0" operation="+"/>
+	  <entry  key="major" value="0"/>
+	  <entry  key="date" type="date" value="${timestamp}"/>
+	</propertyfile>
+	
 	<!-- create directorys -->
 	<target name="init" depends="clean">
 		<!-- Create build path -->
