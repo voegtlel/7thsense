@@ -33,6 +33,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -76,6 +77,8 @@ public class LoggerFrame //NOPMD
 	private final JPanel panel;
 	
 	private final Handler _loggerHandler;
+	
+	private UncaughtExceptionHandler _defaultUncaughtExceptionHandler;
 	
 	private FileWriter _logfileWriter;
 	
@@ -179,6 +182,21 @@ public class LoggerFrame //NOPMD
 		GLOBAL_LOGGER.setUseParentHandlers(true);
 		GLOBAL_LOGGER.setLevel(Level.INFO);
 		GLOBAL_LOGGER.addHandler(_loggerHandler);
+		
+		_defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler()
+		{
+			@Override
+			public void uncaughtException(final Thread t, final Throwable e)
+			{
+				writeThreadThrowable(t, e);
+				if(_defaultUncaughtExceptionHandler != null)
+				{
+					// Call previous handler
+					_defaultUncaughtExceptionHandler.uncaughtException(t, e);
+				}
+			}
+		});
 	}
 	
 	/**
@@ -187,6 +205,9 @@ public class LoggerFrame //NOPMD
 	private void detachLogger()
 	{
 		GLOBAL_LOGGER.removeHandler(_loggerHandler);
+		
+		Thread.setDefaultUncaughtExceptionHandler(_defaultUncaughtExceptionHandler);
+		_defaultUncaughtExceptionHandler = null;
 	}
 	
 	/**
@@ -237,6 +258,41 @@ public class LoggerFrame //NOPMD
 	}
 	
 	/**
+	 * Writes a log entry for a throwable
+	 * 
+	 * @param throwable
+	 */
+	private void writeThrowable(final Throwable throwable)
+	{
+		writeString(throwable.getClass().toString(), _messageExceptionClassAttributeSet);
+		writeString(": " + throwable.getMessage() + "\r\n", _messageExceptionAttributeSet);
+		for(StackTraceElement stackTraceElement : throwable.getStackTrace())
+		{
+			writeString("\tat ", _messageExceptionAttributeSet);
+			writeString(stackTraceElement.getClassName(), _messageExceptionClassAttributeSet);
+			writeString("." + stackTraceElement.getMethodName(), _messageExceptionMethodAttributeSet);
+			String sourceString = "Unknown Source";
+			if(stackTraceElement.getFileName() != null)
+			{
+				sourceString = stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber();
+			}
+			writeString("(" + sourceString + ")" + "\r\n", _messageExceptionSourceAttributeSet);
+		}
+	}
+	
+	/**
+	 * Event.
+	 * 
+	 * @param t thread
+	 * @param e throwable
+	 */
+	private void writeThreadThrowable(final Thread t, final Throwable e)
+	{
+		writeString("Exception in thread " + t.getName() + "\r\n", _messageWarningAttributeSet);
+		writeThrowable(e);
+	}
+	
+	/**
 	 * Event.
 	 * 
 	 * @param record record
@@ -259,21 +315,7 @@ public class LoggerFrame //NOPMD
 			writeString(record.getMessage() + "\r\n", messageAttributeSet);
 			if(record.getThrown() != null)
 			{
-				final Throwable throwable = record.getThrown();
-				writeString(throwable.getClass().toString(), _messageExceptionClassAttributeSet);
-				writeString(": " + throwable.getMessage() + "\r\n", _messageExceptionAttributeSet);
-				for(StackTraceElement stackTraceElement : throwable.getStackTrace())
-				{
-					writeString("\tat ", _messageExceptionAttributeSet);
-					writeString(stackTraceElement.getClassName(), _messageExceptionClassAttributeSet);
-					writeString("." + stackTraceElement.getMethodName(), _messageExceptionMethodAttributeSet);
-					String sourceString = "Unknown Source";
-					if(stackTraceElement.getFileName() != null)
-					{
-						sourceString = stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber();
-					}
-					writeString("(" + sourceString + ")" + "\r\n", _messageExceptionSourceAttributeSet);
-				}
+				writeThrowable(record.getThrown());
 			}
 			
 			if(isAtBottom)
