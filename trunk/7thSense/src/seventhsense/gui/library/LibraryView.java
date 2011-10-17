@@ -75,7 +75,7 @@ public class LibraryView extends ModelView<INode>
 	/**
 	 * Creates a view for the library
 	 */
-	public LibraryView(final PlayerMixer mixer)
+	public LibraryView()
 	{
 		super();
 
@@ -139,7 +139,7 @@ public class LibraryView extends ModelView<INode>
 		gbl_panelDatabase.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		panelDatabase.setLayout(gbl_panelDatabase);
 		
-		_basicScenarioView = new BasicScenarioView(mixer);
+		_basicScenarioView = new BasicScenarioView();
 		splitPane.setRightComponent(_basicScenarioView);
 		splitPane.setLeftComponent(panelDatabase);
 

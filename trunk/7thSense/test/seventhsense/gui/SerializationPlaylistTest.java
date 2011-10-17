@@ -121,7 +121,7 @@ public class SerializationPlaylistTest extends JDialog
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		_panel = new PlaylistView(new PlayerMixer());
+		_panel = new PlaylistView();
 		frame.getContentPane().add(_panel, BorderLayout.CENTER);
 	}
 }

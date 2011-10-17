@@ -28,11 +28,10 @@
 package seventhsense.sound.engine;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import seventhsense.data.IPropertyChangedListener;
 import seventhsense.data.eventlist.EventList;
-import seventhsense.system.NativeLoader;
+import seventhsense.sound.NativeLoader;
 
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALFactory;
@@ -40,27 +39,42 @@ import com.jogamp.openal.util.ALut;
 
 /**
  * Class for the mixer used by the player
- * TODO: Make singleton
  * 
  * @author Parallan
  *
  */
-public class PlayerMixer
+public final class PlayerMixer
 {
 	/**
 	 * Property constant for events
 	 */
 	public static final String PROPERTY_VOLUME = "volume";
-
-	/**
-	 * LOGGER
-	 */
-	private static final Logger LOGGER = Logger.getLogger(PlayerMixer.class.getName());
 	
 	/**
-	 * Native loader for the librarys
+	 * Player Mixer singleton instance
 	 */
-	private static NativeLoader __nativeLoader;
+	private static PlayerMixer PLAYER_MIXER_INSTANCE;
+	
+	/**
+	 * Static initializer
+	 */
+	static
+	{
+		final NativeLoader nativeLoader = new NativeLoader(new File("lib"));
+		nativeLoader.initializeNatives();
+		
+		ALut.alutInit();
+		
+		PLAYER_MIXER_INSTANCE = new PlayerMixer();
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run()
+			{
+				ALut.alutExit();
+			}
+		});
+	}
 	
 	/**
 	 * The mixer to manage
@@ -80,14 +94,8 @@ public class PlayerMixer
 	/**
 	 * Creates a mixer for the player
 	 */
-	public PlayerMixer()
+	private PlayerMixer()
 	{
-		if(__nativeLoader == null)
-		{
-			__nativeLoader = new NativeLoader(new File("lib"));
-			__nativeLoader.initializeNatives();
-		}
-		ALut.alutInit();
 		_mixer = ALFactory.getAL();
 	}
 	
@@ -156,10 +164,13 @@ public class PlayerMixer
 		}
 	}
 	
-	@Override
-	protected void finalize() throws Throwable
+	/**
+	 * Gets the singleton instance
+	 * 
+	 * @return singleton instance
+	 */
+	public static PlayerMixer get()
 	{
-		ALut.alutExit();
-		super.finalize();
+		return PLAYER_MIXER_INSTANCE;
 	}
 }

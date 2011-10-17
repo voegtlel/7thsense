@@ -175,13 +175,6 @@ public class BasicScenarioNode extends AbstractScenarioNode
 	}
 
 	@Override
-	public void setMixer(final PlayerMixer mixer)
-	{
-		_musicManager.setMixer(mixer);
-		_soundFxManager.setMixer(mixer);
-	}
-
-	@Override
 	public void load() throws SoundException
 	{
 	}

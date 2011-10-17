@@ -54,7 +54,7 @@ public class SoundFxView extends ModelView<SoundFxItem>
 	/**
 	 * Create the panel.
 	 */
-	public SoundFxView(final PlayerMixer mixer)
+	public SoundFxView()
 	{
 		super();
 		setLayout(new BorderLayout(0, 0));
@@ -63,7 +63,7 @@ public class SoundFxView extends ModelView<SoundFxItem>
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		add(tabbedPane);
 
-		_basicPanel = new SoundFxBasicPanel(mixer);
+		_basicPanel = new SoundFxBasicPanel();
 		tabbedPane.addTab("Basic", null, _basicPanel, "Basic properties for the sound effect");
 
 		_scriptingPanel = new SoundFxScriptingPanel();

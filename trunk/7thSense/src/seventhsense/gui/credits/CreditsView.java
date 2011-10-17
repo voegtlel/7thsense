@@ -39,6 +39,12 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.JLabel;
+
+import seventhsense.system.Version;
+
+import java.awt.Insets;
+import javax.swing.SwingConstants;
 
 /**
  * Panel for showing developer credits and donate button
@@ -63,13 +69,14 @@ public class CreditsView extends JPanel
 		
 		final GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		final JEditorPane editorPaneCredits = new JEditorPane();
 		final GridBagConstraints gbc_editorPaneCredits = new GridBagConstraints();
+		gbc_editorPaneCredits.insets = new Insets(0, 0, 5, 0);
 		gbc_editorPaneCredits.fill = GridBagConstraints.BOTH;
 		gbc_editorPaneCredits.gridx = 0;
 		gbc_editorPaneCredits.gridy = 0;
@@ -93,6 +100,13 @@ public class CreditsView extends JPanel
 			}
 		});
 		
+		final JLabel labelVersion = new JLabel(Version.getVersion().toString());
+		labelVersion.setHorizontalAlignment(SwingConstants.TRAILING);
+		final GridBagConstraints gbc_labelVersion = new GridBagConstraints();
+		gbc_labelVersion.fill = GridBagConstraints.BOTH;
+		gbc_labelVersion.gridx = 0;
+		gbc_labelVersion.gridy = 1;
+		add(labelVersion, gbc_labelVersion);
 	}
 
 	/**

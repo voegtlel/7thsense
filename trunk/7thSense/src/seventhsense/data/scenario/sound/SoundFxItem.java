@@ -29,7 +29,8 @@ package seventhsense.data.scenario.sound;
 
 import java.util.logging.Logger;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
+import seventhsense.data.file.FileReferenceManager;
 import seventhsense.data.scenario.ScriptItem;
 
 /**
@@ -105,7 +106,7 @@ public class SoundFxItem extends AbstractSoundItem<SoundFxItem>
 	 */
 	public SoundFxItem()
 	{
-		this(0.0, 0.0, 1.0, new FileReference(""), null, null, null);
+		this(0.0, 0.0, 1.0, FileReferenceManager.get().getEmptyReference(), null, null, null);
 	}
 
 	/**

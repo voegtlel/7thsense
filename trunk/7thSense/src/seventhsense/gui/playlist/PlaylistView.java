@@ -73,7 +73,7 @@ public class PlaylistView extends ModelView<INode>
 	/**
 	 * Creates the playlist view
 	 */
-	public PlaylistView(final PlayerMixer mixer)
+	public PlaylistView()
 	{
 		super();
 		
@@ -115,7 +115,7 @@ public class PlaylistView extends ModelView<INode>
 		gbl_panelRight.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panelRight.setLayout(gbl_panelRight);
 		
-		_soundPlayer = new SoundPlayer(mixer);
+		_soundPlayer = new SoundPlayer();
 		final GridBagConstraints gbc__soundPlayer = new GridBagConstraints();
 		gbc__soundPlayer.gridwidth = 2;
 		gbc__soundPlayer.insets = new Insets(0, 0, 5, 0);

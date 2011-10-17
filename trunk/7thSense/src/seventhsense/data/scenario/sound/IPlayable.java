@@ -89,13 +89,6 @@ public interface IPlayable
 	 * @return loaded state
 	 */
 	boolean isLoaded();
-	
-	/**
-	 * Sets the mixer
-	 * 
-	 * @param mixer mixer to use for playing
-	 */
-	void setMixer(PlayerMixer mixer);
 
 	/**
 	 * Sets the fade time

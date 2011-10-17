@@ -49,8 +49,8 @@ import javax.swing.event.ChangeListener;
 import seventhsense.gui.file.MediaFilePanel;
 import seventhsense.gui.numberslider.NumberSlider;
 import seventhsense.gui.timeslider.TimeSliderLinear;
+import seventhsense.sound.NativeLoader;
 import seventhsense.sound.engine.input.JavaSoundDecoderStream;
-import seventhsense.system.NativeLoader;
 
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALFactory;
@@ -262,7 +262,7 @@ public class SoundTest extends JFrame
 				_audioThread.close();
 			}
 			_audioThread = null;
-			_audioThread = new AudioThread(new AudioBuffer(_al, new JavaSoundDecoderStream(new File(_mediaFilePanel.getValue().getPath()))));
+			_audioThread = new AudioThread(new AudioBuffer(new JavaSoundDecoderStream(new File(_mediaFilePanel.getValue().getPath()))));
 			_audioThread.addSoundListener(new ISoundListener<IPlayer>()
 			{
 				@Override

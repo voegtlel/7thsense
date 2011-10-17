@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.scenario.basicscenario.BasicScenarioNode;
 import seventhsense.data.scenario.sound.FadeType;
 import seventhsense.data.scenario.sound.MusicItem;
@@ -110,7 +110,7 @@ public class BasicScenarioViewTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		final BasicScenarioView panel = new BasicScenarioView(new PlayerMixer());
+		final BasicScenarioView panel = new BasicScenarioView();
 		panel.setModel(getTestData());
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}

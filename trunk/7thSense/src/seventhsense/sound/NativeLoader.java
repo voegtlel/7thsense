@@ -25,12 +25,14 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.system;
+package seventhsense.sound;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -97,8 +99,6 @@ public class NativeLoader
         
         _osLibPath = new File(basePath, _osName + "-" + _osSystem);
         
-        
-        
 		_libraryFileGluegen = new File(getJarPath(), _osLibPath + "/" + System.mapLibraryName("gluegen-rt"));
         _libraryFileJoal = new File(getJarPath(), _osLibPath + "/" + System.mapLibraryName("joal"));
         
@@ -114,8 +114,17 @@ public class NativeLoader
 	 */
 	private static File getJarPath()
 	{
-		final File jarFile = new File(NativeLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		
+		final String jarPath = NativeLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File jarFile;
+		try
+		{
+			jarFile = new File(URLDecoder.decode(jarPath, "UTF-8"));
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			LOGGER.log(Level.SEVERE, e.toString(), e);
+			jarFile = new File(jarPath);
+		}
 		final File absolutePath = jarFile.getAbsoluteFile();
 		return absolutePath.getParentFile();
 	}

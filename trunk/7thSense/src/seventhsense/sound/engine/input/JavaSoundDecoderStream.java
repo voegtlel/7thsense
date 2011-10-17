@@ -79,18 +79,21 @@ public class JavaSoundDecoderStream implements IAudioInputStream
 		final AudioFormat baseFormat = _fileFormat.getFormat();
 		LOGGER.log(Level.FINE, "Source Format: " + baseFormat);
 		int sampleSize;
+		AudioFormat.Encoding encoding;
 		if(baseFormat.getSampleSizeInBits() == 8)
 		{
 			// Only if 8 is specified, use 8
 			sampleSize = 8;
+			encoding = AudioFormat.Encoding.PCM_UNSIGNED;
 		}
 		else// if((baseFormat.getSampleSizeInBits() == AudioSystem.NOT_SPECIFIED) || (baseFormat.getSampleSizeInBits() == 16))
 		{
 			sampleSize = 16;
+			encoding = AudioFormat.Encoding.PCM_SIGNED;
 		}
 		
 		// Find decode format
-		_decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_UNSIGNED, // Encoding to use
+		_decodedFormat = new AudioFormat(encoding, // Encoding to use
 				baseFormat.getSampleRate(), // sample rate (same as base format)
 				sampleSize, // sample size in bits
 				baseFormat.getChannels(), // # of Channels

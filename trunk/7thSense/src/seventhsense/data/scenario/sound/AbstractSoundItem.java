@@ -36,9 +36,10 @@ import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import seventhsense.data.FileReference;
 import seventhsense.data.IItem;
 import seventhsense.data.eventlist.EventList;
+import seventhsense.data.file.FileReference;
+import seventhsense.data.file.FileReferenceManager;
 import seventhsense.sound.SoundFactory;
 import seventhsense.sound.engine.IPlayer;
 import seventhsense.sound.engine.ISoundListener;
@@ -116,11 +117,6 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	 * Thread for AfterFade
 	 */
 	protected transient DelayThread _afterFadeThread;
-
-	/**
-	 * Mixer
-	 */
-	private transient PlayerMixer _mixer;
 
 	/**
 	 * Default time for fading in
@@ -234,7 +230,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 		if (_soundPlayer == null)
 		{
 			LOGGER.log(Level.FINE, _file + " load");
-			_soundPlayer = new SoundFadeFile(SoundFactory.createPlayer(new File(_file.getPath()), _mixer));
+			_soundPlayer = new SoundFadeFile(SoundFactory.createPlayer(new File(_file.getPath())));
 			_soundPlayer.setVolume(_volume);
 			_soundPlayer.addSoundListener(_soundListener);
 		}
@@ -458,12 +454,6 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 	}
 
 	@Override
-	public void setMixer(final PlayerMixer mixer)
-	{
-		_mixer = mixer;
-	}
-
-	@Override
 	public void setFadeTime(final double fadeTime)
 	{
 		_defaultFadeInTime = fadeTime;
@@ -553,6 +543,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 			}
 		};
 		_listeners = new EventList<ISoundItemListener<E>>();
+		_file = FileReferenceManager.get().getFileReference(_file);
 	}
 
 	/**

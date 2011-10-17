@@ -91,7 +91,7 @@ public class MusicViewTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final MusicView panel = new MusicView(new PlayerMixer());
+		final MusicView panel = new MusicView();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 

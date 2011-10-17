@@ -25,7 +25,7 @@
  * 
  * For more information check <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
  */
-package seventhsense.data;
+package seventhsense.data.file;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,7 +37,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
 /**
- * File reference for media files
+ * File reference for media files.
+ * On deserialization, the file must be sent to the FileReferenceManager
  * 
  * @author Parallan
  *

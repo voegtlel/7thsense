@@ -50,9 +50,10 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import seventhsense.data.FileReference;
 import seventhsense.data.INode;
 import seventhsense.data.eventlist.EventList;
+import seventhsense.data.file.FileReference;
+import seventhsense.data.file.FileReferenceManager;
 import seventhsense.gui.ModelView;
 
 import javax.swing.ImageIcon;
@@ -235,7 +236,7 @@ public class MediaFilePanel extends JPanel
 	 */
 	public FileReference getValue()
 	{
-		return new FileReference(_textFieldSoundFilePath.getText());
+		return FileReferenceManager.get().getFileReference(_textFieldSoundFilePath.getText());
 	}
 
 	/**

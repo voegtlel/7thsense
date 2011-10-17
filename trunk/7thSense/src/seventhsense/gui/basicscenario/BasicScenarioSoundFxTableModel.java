@@ -29,7 +29,7 @@ package seventhsense.gui.basicscenario;
 
 import javax.swing.table.AbstractTableModel;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.listenerlist.IListItemListener;
 import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.scenario.basicscenario.BasicScenarioNode;

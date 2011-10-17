@@ -79,11 +79,11 @@ public class AudioBuffer
 	/**
 	 * Creates an audio buffer for draining and pushing data
 	 */
-	public AudioBuffer(final AL al, final IAudioInputStream sourceStream)
+	public AudioBuffer(final IAudioInputStream sourceStream)
 	{
 		LOGGER.log(Level.FINE, "create AudioBuffer");
 		
-		_al = al;
+		_al = PlayerMixer.get().getAl();
 		_sourceStream = sourceStream;
 		
 		_al.alGenBuffers(_buffers.length, _buffers, 0);
@@ -192,7 +192,7 @@ public class AudioBuffer
 		{
 			play();
 		}
-		else if(_isPlaying && _isPaused)
+		else if(_isPaused)
 		{
 			_isPaused = false;
 			_al.alSourcePlay(_source);
@@ -442,7 +442,7 @@ public class AudioBuffer
 		
 		final int buffersQueued = getBuffersQueued();
 		
-		if((buffersQueued <= 0) && _holdPlaying)
+		if((buffersQueued == 0) && _holdPlaying)
 		{
 			LOGGER.log(Level.FINE, "sound finish");
 			
@@ -450,6 +450,10 @@ public class AudioBuffer
 			_isPaused = false;
 			_holdPlaying = false;
 			_lastBufferSize = 0;
+			if(getSourceState() == AL.AL_PLAYING)
+			{
+				_al.alSourceStop(_source);
+			}
 			return false;
 		}
 		

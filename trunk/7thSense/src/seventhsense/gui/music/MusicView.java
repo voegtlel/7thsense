@@ -46,7 +46,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.scenario.sound.FadeType;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
@@ -95,7 +95,7 @@ public class MusicView extends ModelView<MusicItem>
 	/**
 	 * Creates the music view
 	 */
-	public MusicView(final PlayerMixer mixer)
+	public MusicView()
 	{
 		super();
 
@@ -306,7 +306,7 @@ public class MusicView extends ModelView<MusicItem>
 		gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 
-		_player = new SoundPlayer(mixer);
+		_player = new SoundPlayer();
 		_player.setEnabled(false);
 		final GridBagConstraints gbc_player = new GridBagConstraints();
 		gbc_player.fill = GridBagConstraints.BOTH;

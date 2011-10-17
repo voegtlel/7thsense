@@ -134,7 +134,6 @@ public class SoundFxManager extends AbstractScenarioManager<SoundFxItem>
 			}
 			else if (!item.isLoaded())
 			{
-				item.setMixer(_mixer);
 				item.load();
 			}
 			_replayThreads.set(itemIndex, new DelayThread(waitTime, new Runnable()
@@ -169,7 +168,6 @@ public class SoundFxManager extends AbstractScenarioManager<SoundFxItem>
 			{
 				try
 				{
-					item.setMixer(_mixer);
 					item.load();
 				}
 				catch (SoundException e)

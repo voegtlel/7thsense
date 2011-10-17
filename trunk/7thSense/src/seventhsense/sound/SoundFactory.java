@@ -54,13 +54,13 @@ public final class SoundFactory
 		// Can't instantiate
 	}
 	
-	public static IPlayer createPlayer(final File file, final PlayerMixer mixer) throws SoundException
+	public static IPlayer createPlayer(final File file) throws SoundException
 	{
 		try
 		{
-			return new GlobalVolumeFilter(mixer,
+			return new GlobalVolumeFilter(
 					new AudioThread(
-							new AudioBuffer(mixer.getAl(),
+							new AudioBuffer(
 									new JavaSoundDecoderStream(file)
 							)
 						)

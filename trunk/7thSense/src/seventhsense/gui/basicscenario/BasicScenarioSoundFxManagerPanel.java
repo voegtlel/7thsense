@@ -50,9 +50,9 @@ public class BasicScenarioSoundFxManagerPanel extends AbstractBasicScenarioManag
 	/**
 	 * 
 	 */
-	public BasicScenarioSoundFxManagerPanel(final PlayerMixer mixer)
+	public BasicScenarioSoundFxManagerPanel()
 	{
-		super(new BasicScenarioSoundFxTablePanel(), new SoundFxView(mixer));
+		super(new BasicScenarioSoundFxTablePanel(), new SoundFxView());
 	}
 
 	/**

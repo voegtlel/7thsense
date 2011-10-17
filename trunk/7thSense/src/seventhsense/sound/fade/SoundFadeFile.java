@@ -108,7 +108,10 @@ public class SoundFadeFile implements IPlayerFade
 			@Override
 			public void setValue(final double value)
 			{
-				_file.setVolume(value);
+				if(!_file.isClosed())
+				{
+					_file.setVolume(value);
+				}
 			}
 		});
 		_volumeFx.addListener(new IFxListener()
@@ -181,6 +184,7 @@ public class SoundFadeFile implements IPlayerFade
 		fireEvent(SoundEventType.Stopping);
 		_fadeState = FadeState.FadeStopping;
 		_volumeFx.start(0, _fadeTime);
+		LOGGER.log(Level.FINE, "stop");
 	}
 
 	@Override
@@ -212,6 +216,12 @@ public class SoundFadeFile implements IPlayerFade
 	public boolean isPaused()
 	{
 		return _file.isPaused();
+	}
+	
+	@Override
+	public boolean isClosed()
+	{
+		return _file.isClosed();
 	}
 
 	@Override

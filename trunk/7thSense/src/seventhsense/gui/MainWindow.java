@@ -48,8 +48,6 @@ public class MainWindow extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final PlayerMixer _mixer;
-
 	/**
 	 * Create the application.
 	 */
@@ -57,16 +55,14 @@ public class MainWindow extends JFrame
 	{
 		super();
 		
-		_mixer = new PlayerMixer();
-		
-		setTitle("7th Sense | " + Version.fromFile().toString());
+		setTitle("7th Sense (" + Version.getVersion().toString() + ")");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/seventhsense/resources/AppIcon_32.png")));
 		
 		this.setLocationByPlatform(true);
 		this.setSize(800, 600);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		getContentPane().add(new MainView(_mixer));
+		getContentPane().add(new MainView());
 	}
 
 }
