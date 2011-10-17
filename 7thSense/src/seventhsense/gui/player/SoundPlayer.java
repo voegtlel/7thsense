@@ -481,7 +481,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 	{
 		if(_playingModel != null)
 		{
-			if (_playingModel.isPaused())
+			if (_playingModel.isPaused() || !_playingModel.isPlaying())
 			{
 				resume();
 			}
