@@ -93,7 +93,7 @@ public class MainViewTest
 		frame.setSize(700, 500);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final MainView panel = new MainView(new PlayerMixer());
+		final MainView panel = new MainView();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 

@@ -155,6 +155,11 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 		LOGGER.log(Level.FINE, "randomize last order: " + _musicOrder);
 		Collections.shuffle(_musicOrder);
 		LOGGER.log(Level.FINE, "randomize new order: " + _musicOrder);
+		if((_currentItem == null) || !_currentItem.isPlaying())
+		{
+			LOGGER.log(Level.FINER, "reset current item");
+			_currentItem = null;
+		}
 	}
 
 	/**
@@ -167,6 +172,11 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 		{
 			_musicOrder.set(i, i);
 		}
+		if((_currentItem == null) || !_currentItem.isPlaying())
+		{
+			LOGGER.log(Level.FINER, "reset current item");
+			_currentItem = null;
+		}
 	}
 
 	/**
@@ -177,7 +187,6 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	{
 		try
 		{
-			_currentItem.setMixer(_mixer);
 			_currentItem.load();
 		}
 		catch (SoundException e)
@@ -289,9 +298,11 @@ public class MusicManager extends AbstractScenarioManager<MusicItem>
 	protected void onItemRemoved(final int index, final MusicItem item)
 	{
 		super.onItemRemoved(index, item);
-		_musicOrder.remove(Integer.valueOf(index));
+		_musicOrder.remove(Integer.valueOf(_musicOrder.size() - 1)); //Always remove last index
 		if(item.equals(_currentItem))
 		{
+			_currentItem.unload();
+			_currentItem = null;
 			nextMusic(false);
 		}
 	}

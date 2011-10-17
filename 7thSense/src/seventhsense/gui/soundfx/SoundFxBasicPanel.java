@@ -42,7 +42,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.SoundFxItem;
 import seventhsense.gui.ModelView;
@@ -87,7 +87,7 @@ public class SoundFxBasicPanel extends ModelView<SoundFxItem>
 	/**
 	 * Create the panel.
 	 */
-	public SoundFxBasicPanel(final PlayerMixer mixer)
+	public SoundFxBasicPanel()
 	{
 		super();
 
@@ -294,7 +294,7 @@ public class SoundFxBasicPanel extends ModelView<SoundFxItem>
 		gbl_panelPlayer.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panelPlayer.setLayout(gbl_panelPlayer);
 
-		_player = new SoundPlayer(mixer);
+		_player = new SoundPlayer();
 		final GridBagConstraints gbc_player = new GridBagConstraints();
 		gbc_player.fill = GridBagConstraints.BOTH;
 		gbc_player.gridx = 0;

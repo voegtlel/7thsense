@@ -92,7 +92,7 @@ public class PlaylistAdvancedTest
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		final PlaylistView panel = new PlaylistView(new PlayerMixer());
+		final PlaylistView panel = new PlaylistView();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 	}
 }

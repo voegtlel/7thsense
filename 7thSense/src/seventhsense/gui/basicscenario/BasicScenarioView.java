@@ -58,7 +58,7 @@ public class BasicScenarioView extends JPanel
 	/**
 	 * Creates the basic scenario panel
 	 */
-	public BasicScenarioView(final PlayerMixer mixer)
+	public BasicScenarioView()
 	{
 		super();
 		final GridBagLayout gridBagLayout = new GridBagLayout();
@@ -75,7 +75,7 @@ public class BasicScenarioView extends JPanel
 		gbc_tabbedPane.gridy = 0;
 		add(tabbedPane, gbc_tabbedPane);
 
-		_musicManagerPanel = new BasicScenarioMusicManagerPanel(mixer);
+		_musicManagerPanel = new BasicScenarioMusicManagerPanel();
 		_musicManagerPanel.addSplitterPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(final PropertyChangeEvent event) {
 				if(JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY.equals(event.getPropertyName()))
@@ -86,7 +86,7 @@ public class BasicScenarioView extends JPanel
 		});
 		tabbedPane.addTab("Music", null, _musicManagerPanel, null);
 		
-		_soundFxManagerPanel = new BasicScenarioSoundFxManagerPanel(mixer);
+		_soundFxManagerPanel = new BasicScenarioSoundFxManagerPanel();
 		_soundFxManagerPanel.addSplitterPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(final PropertyChangeEvent event) {
 				if(JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY.equals(event.getPropertyName()))

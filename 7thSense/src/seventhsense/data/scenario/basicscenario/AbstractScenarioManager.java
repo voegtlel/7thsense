@@ -99,11 +99,6 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	private transient ISoundItemListener<E> _soundItemListener;
 
 	/**
-	 * Mixer used for playing
-	 */
-	protected transient PlayerMixer _mixer;
-
-	/**
 	 * Listener list for events in a scenario manager
 	 */
 	private transient EventList<IPropertyChangedListener<AbstractScenarioManager<E>>> _listeners;
@@ -220,16 +215,6 @@ public abstract class AbstractScenarioManager<E extends AbstractSoundItem<E>> im
 	 * @return paused state
 	 */
 	public abstract boolean isPaused();
-
-	/**
-	 * Sets the mixer
-	 * 
-	 * @param mixer new mixer
-	 */
-	public void setMixer(final PlayerMixer mixer)
-	{
-		_mixer = mixer;
-	}
 
 	/**
 	 * Returns the cached check-result

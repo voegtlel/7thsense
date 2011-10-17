@@ -64,9 +64,9 @@ public class BasicScenarioMusicManagerPanel extends AbstractBasicScenarioManager
 	/**
 	 * 
 	 */
-	public BasicScenarioMusicManagerPanel(final PlayerMixer mixer)
+	public BasicScenarioMusicManagerPanel()
 	{
-		super(new BasicScenarioMusicTablePanel(), new MusicView(mixer));
+		super(new BasicScenarioMusicTablePanel(), new MusicView());
 		
 		_checkBoxRandomize = new JCheckBox("Shuffle Playing");
 		_checkBoxRandomize.setToolTipText("When checked, the music items will be shuffled on playing. Their playing order is randomized.");

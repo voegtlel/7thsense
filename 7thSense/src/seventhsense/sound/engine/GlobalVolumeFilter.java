@@ -45,11 +45,6 @@ public class GlobalVolumeFilter implements IPlayer
 	private static final Logger LOGGER = Logger.getLogger(GlobalVolumeFilter.class.getName());
 	
 	/**
-	 * The parent mixer
-	 */
-	private final PlayerMixer _mixer;
-	
-	/**
 	 * The data line to manage
 	 */
 	private final IPlayer _player;
@@ -77,12 +72,10 @@ public class GlobalVolumeFilter implements IPlayer
 	/**
 	 * Create a source data line
 	 * 
-	 * @param mixer the controlling mixer
 	 * @param sourceDataLine the managed line
 	 */
-	public GlobalVolumeFilter(final PlayerMixer mixer, final IPlayer player)
+	public GlobalVolumeFilter(final IPlayer player)
 	{
-		_mixer = mixer;
 		_player = player;
 		_volume = player.getVolume();
 		
@@ -107,7 +100,7 @@ public class GlobalVolumeFilter implements IPlayer
 			}
 		};
 		
-		_mixer.addListener(_mixerListener);
+		PlayerMixer.get().addListener(_mixerListener);
 		_player.addSoundListener(_playerListener);
 	}
 	
@@ -129,7 +122,7 @@ public class GlobalVolumeFilter implements IPlayer
 	public void setVolume(final double volume)
 	{
 		_volume = Math.min(Math.max(0, volume), 1);
-		final double finalVolume = _volume * _mixer.getVolume();
+		final double finalVolume = _volume * PlayerMixer.get().getVolume();
 		LOGGER.log(Level.FINEST, "set volume to " + (finalVolume*100) + "%");
 		_player.setVolume(finalVolume);
 		fireSoundEvent(SoundEventType.Volume);
@@ -176,6 +169,12 @@ public class GlobalVolumeFilter implements IPlayer
 	{
 		return _player.isPaused();
 	}
+	
+	@Override
+	public boolean isClosed()
+	{
+		return _player.isClosed();
+	}
 
 	@Override
 	public void setTime(final double time) throws SoundException
@@ -199,7 +198,7 @@ public class GlobalVolumeFilter implements IPlayer
 	public void close()
 	{
 		_player.close();
-		_mixer.removeListener(_mixerListener);
+		PlayerMixer.get().removeListener(_mixerListener);
 		_player.removeSoundListener(_playerListener);
 	}
 

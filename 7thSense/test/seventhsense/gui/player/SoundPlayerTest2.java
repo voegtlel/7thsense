@@ -36,7 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.scenario.basicscenario.BasicScenarioNode;
 import seventhsense.data.scenario.sound.FadeType;
 import seventhsense.data.scenario.sound.MusicItem;
@@ -108,7 +108,7 @@ public class SoundPlayerTest2
 		_frame.setBounds(100, 100, 221, 82);
 		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		_player = new SoundPlayer(new PlayerMixer());
+		_player = new SoundPlayer();
 		_frame.getContentPane().add(_player);
 
 		final FileReference fileRef = new FileReference("test/data/Erdenstern - Sons of the desert_Remastered.mp3");

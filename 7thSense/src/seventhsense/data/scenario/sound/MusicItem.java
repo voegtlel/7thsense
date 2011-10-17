@@ -27,7 +27,15 @@
  */
 package seventhsense.data.scenario.sound;
 
-import seventhsense.data.FileReference;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+import seventhsense.data.eventlist.EventList;
+import seventhsense.data.file.FileReference;
+import seventhsense.data.file.FileReferenceManager;
+import seventhsense.sound.engine.IPlayer;
+import seventhsense.sound.engine.ISoundListener;
+import seventhsense.sound.engine.SoundEventType;
 
 /**
  * Represents a single music of a scenario with all of it's properties
@@ -84,7 +92,7 @@ public class MusicItem extends AbstractSoundItem<MusicItem>
 	 */
 	public MusicItem()
 	{
-		this(FadeType.VolumeFade, true, true, 1.0, new FileReference(""));
+		this(FadeType.VolumeFade, true, true, 1.0, FileReferenceManager.get().getEmptyReference());
 	}
 	
 	/**

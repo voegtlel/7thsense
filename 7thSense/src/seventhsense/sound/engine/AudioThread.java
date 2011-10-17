@@ -324,22 +324,13 @@ public class AudioThread implements IPlayer
 	@Override
 	public void stop()
 	{
-		boolean wasPerformed = false;
 		synchronized (_threadLock)
 		{
-			if(_isPlaying)
-			{
-				checkThread();
-				LOGGER.log(Level.FINE, "stop");
-				_isPlaying = false;
-				_isPaused = false;
-				_playBuffer.stop();
-				wasPerformed = true;
-			}
-		}
-		if(wasPerformed)
-		{
-			fireEvent(SoundEventType.Stopped);
+			checkThread();
+			LOGGER.log(Level.FINE, "stop");
+			_isPlaying = false;
+			_isPaused = false;
+			_playBuffer.stop();
 		}
 	}
 
@@ -349,7 +340,7 @@ public class AudioThread implements IPlayer
 		synchronized (_threadLock)
 		{
 			checkThread();
-			if(!_isPaused && _isPlaying)
+			if(_isPlaying)
 			{
 				LOGGER.log(Level.FINE, "pause");
 				_isPaused = true;
@@ -419,7 +410,7 @@ public class AudioThread implements IPlayer
 	{
 		if(isClosed())
 		{
-			throw new IllegalStateException("Thread was not started or was closed");
+			throw new IllegalStateException("Audio thread was closed");
 		}
 	}
 	

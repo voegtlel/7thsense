@@ -115,13 +115,6 @@ public class TreeViewAdvancedTest
 		}
 
 		@Override
-		public void setMixer(PlayerMixer mixer)
-		{
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
 		public void load() throws SoundException
 		{
 			// TODO Auto-generated method stub

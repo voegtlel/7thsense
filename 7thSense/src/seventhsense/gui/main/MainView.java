@@ -68,7 +68,7 @@ public class MainView extends JPanel
 	/**
 	 * Creates the main view
 	 */
-	public MainView(final PlayerMixer mixer)
+	public MainView()
 	{
 		super();
 		
@@ -107,7 +107,7 @@ public class MainView extends JPanel
 		gbc_tabbedPane.gridy = 0;
 		add(tabbedPane, gbc_tabbedPane);
 
-		_libraryView = new LibraryView(mixer);
+		_libraryView = new LibraryView();
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Library", true), _libraryView, null);
 		
 		_playlistManagerView = new PlaylistManagerView();
@@ -121,7 +121,7 @@ public class MainView extends JPanel
 		});
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Playlist Manager", true), _playlistManagerView, null);
 		
-		_playlistView = new PlaylistView(mixer);
+		_playlistView = new PlaylistView();
 		tabbedPane.addTab(null, new VerticalLabelIcon(tabbedPane, "Playlist", true), _playlistView, null);
 		
 		_creditView = new CreditsView();

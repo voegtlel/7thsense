@@ -45,7 +45,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.listenerlist.IListenerList;
 import seventhsense.data.scenario.sound.AbstractSoundItem;
 import seventhsense.gui.table.DisabledCheckboxCellRenderer;

@@ -130,4 +130,11 @@ public interface IPlayer
 	 * Closes all assigned resources
 	 */
 	void close();
+
+	/**
+	 * Returns the closed state
+	 * 
+	 * @return true if closed
+	 */
+	boolean isClosed();
 }

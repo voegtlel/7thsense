@@ -27,14 +27,18 @@
  */
 package seventhsense.system;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 /**
  * Version
@@ -47,9 +51,14 @@ public class Version
 	 * Logger
 	 */
 	private static final Logger LOGGER = Logger.getLogger(Version.class.getName());
+	
+	/**
+	 * Contains the program version
+	 */
+	private static final Version PROPERTIES_VERSION = loadVersion();
 
-	private final int _major;
-	private final int _minor;
+	private final String _major;
+	private final String _minor;
 	private final String _date;
 
 	/**
@@ -58,27 +67,34 @@ public class Version
 	 * @param minor Minor application version
 	 * @param date Date of build
 	 */
-	public Version(final int major, final int minor, final String date)
+	public Version(final String major, final String minor, final String date)
 	{
 		_major = major;
 		_minor = minor;
 		_date = date;
 	}
-
-	public static Version fromFile()
+	
+	/**
+	 * Loads the version from the resource file
+	 * 
+	 * @return version stored in resource file
+	 */
+	private static Version loadVersion()
 	{
-		int major = 0, minor = 0;
-		String date = "";
+		String major = "0";
+		String minor = "0";
+		Date date = new Date(0);
 
 		final Properties prop = new Properties();
 		try
 		{
-			final FileInputStream s = new FileInputStream("Properties.txt");
-			prop.load(s);
-			minor = Integer.parseInt(prop.getProperty("minor"));
-			major = Integer.parseInt(prop.getProperty("major"));
-			date = prop.getProperty("date");
-			s.close();
+			final InputStream stream = Version.class.getResource("/seventhsense/resources/properties.txt").openStream();
+			prop.load(stream);
+			minor = prop.getProperty("minor");
+			major = prop.getProperty("major");
+			final DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+			date = dateFormat.parse(prop.getProperty("date"));
+			stream.close();
 		}
 		catch (FileNotFoundException e)
 		{
@@ -88,8 +104,21 @@ public class Version
 		{
 			LOGGER.log(Level.FINE, e.getMessage());
 		}
-		
-		return new Version(major, minor, date);
+		catch (ParseException e)
+		{
+			LOGGER.log(Level.FINE, e.getMessage());
+		}
+		return new Version(major, minor, new SimpleDateFormat().format(date));
+	}
+	
+	/**
+	 * Get the current version
+	 * 
+	 * @return version
+	 */
+	public static Version getVersion()
+	{
+		return PROPERTIES_VERSION;
 	}
 
 	/**

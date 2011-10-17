@@ -47,6 +47,7 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import seventhsense.data.IPropertyChangedListener;
 import seventhsense.data.scenario.sound.DelayThread;
 import seventhsense.data.scenario.sound.IPlayable;
 import seventhsense.gui.ModelView;
@@ -82,11 +83,6 @@ public class SoundPlayer extends ModelView<IPlayable>
 	 * Current playable item (most likely a scenario)
 	 */
 	private IPlayable _model;
-
-	/**
-	 * Mixer; everything connected to sound will need to pass here.
-	 */
-	private final PlayerMixer _mixer;
 	
 	/**
 	 * Seeker
@@ -97,17 +93,23 @@ public class SoundPlayer extends ModelView<IPlayable>
 	 * Used for events
 	 */
 	private boolean _isSeeking = false;
+	
+	/**
+	 * Used for events
+	 */
+	private boolean _isVolumeChanging;
 
 	private DelayThread _seekerThread;
 	private NumberSlider _numberSliderVolume;
+	
+	private IPropertyChangedListener<PlayerMixer> _playerMixerPropertyChangedListener;
 
 	/**
 	 * Constructor
 	 */
-	public SoundPlayer(final PlayerMixer mixer)
+	public SoundPlayer()
 	{
 		super();
-		_mixer = mixer; // Get the system's default mixer
 		
 		addAncestorListener(new AncestorListener()
 		{
@@ -260,7 +262,6 @@ public class SoundPlayer extends ModelView<IPlayable>
 		gbc_numberSliderVolume.gridx = 1;
 		gbc_numberSliderVolume.gridy = 1;
 		panelPlayOptions.add(_numberSliderVolume, gbc_numberSliderVolume);
-		_numberSliderVolume.setValue(100.0);
 		_numberSliderVolume.setRange(0, 100, 5);
 		_numberSliderVolume.setToolTipText("Change the fade time used for sounds that fade");
 		_numberSliderVolume.setEnabled(false);
@@ -294,6 +295,18 @@ public class SoundPlayer extends ModelView<IPlayable>
 		gbc__timeSliderSeek.gridx = 0;
 		gbc__timeSliderSeek.gridy = 2;
 		add(_timeSliderSeeker, gbc__timeSliderSeek);
+		
+		_playerMixerPropertyChangedListener = new IPropertyChangedListener<PlayerMixer>()
+		{
+			@Override
+			public void propertyChanged(PlayerMixer caller, String property)
+			{
+				if(PlayerMixer.PROPERTY_VOLUME.equals(property))
+				{
+					onVolumeChanged();
+				}
+			}
+		};
 	}
 
 	/**
@@ -311,6 +324,9 @@ public class SoundPlayer extends ModelView<IPlayable>
 		});
 		_seekerThread.setLoopAction(true);
 		_seekerThread.start();
+		
+		_numberSliderVolume.setValue(PlayerMixer.get().getVolume() * 100);
+		PlayerMixer.get().addListener(_playerMixerPropertyChangedListener);
 	}
 
 	/**
@@ -325,6 +341,8 @@ public class SoundPlayer extends ModelView<IPlayable>
 		play(null);
 		_seekerThread.stop();
 		_seekerThread = null;
+		
+		PlayerMixer.get().removeListener(_playerMixerPropertyChangedListener);
 	}
 
 	@Override
@@ -375,12 +393,10 @@ public class SoundPlayer extends ModelView<IPlayable>
 		if ((_playingModel != null) && (_playingModel != model))
 		{
 			_playingModel.unload();
-			_playingModel.setMixer(null);
 		}
 		_playingModel = model;
 		if(_playingModel != null)
 		{
-			_playingModel.setMixer(_mixer);
 			try
 			{
 				if (!_playingModel.isLoaded())
@@ -481,7 +497,25 @@ public class SoundPlayer extends ModelView<IPlayable>
 	 */
 	private void onNumberSliderVolumeChanged()
 	{
-		_mixer.setVolume(_numberSliderVolume.getValue() / 100.0);
+		if(!_isVolumeChanging)
+		{
+			_isVolumeChanging = true;
+			PlayerMixer.get().setVolume(_numberSliderVolume.getValue() / 100.0);
+			_isVolumeChanging = false;
+		}
+	}
+	
+	/**
+	 * Event.
+	 */
+	protected void onVolumeChanged()
+	{
+		if(!_isVolumeChanging)
+		{
+			_isVolumeChanging = true;
+			_numberSliderVolume.setValue(PlayerMixer.get().getVolume() * 100);
+			_isVolumeChanging = false;
+		}
 	}
 
 	/**

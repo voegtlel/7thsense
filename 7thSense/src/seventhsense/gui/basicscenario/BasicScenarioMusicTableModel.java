@@ -28,7 +28,7 @@
 package seventhsense.gui.basicscenario;
 
 
-import seventhsense.data.FileReference;
+import seventhsense.data.file.FileReference;
 import seventhsense.data.scenario.sound.FadeType;
 import seventhsense.data.scenario.sound.MusicItem;
 
