@@ -71,6 +71,11 @@ public abstract class AbstractNode implements INode
 	 * list of listeners
 	 */
 	private transient EventList<INodeListener> _nodeListeners;
+
+	/**
+	 * Property constant for events
+	 */
+	public static final String PROPERTY_VALID = "valid";
 	
 	/**
 	 * Default constructor for abstract node. Sets the name of the node.

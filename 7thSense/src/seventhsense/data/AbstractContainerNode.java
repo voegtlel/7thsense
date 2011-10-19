@@ -55,6 +55,11 @@ public abstract class AbstractContainerNode extends AbstractNode
 	protected final List<INode> _children = new ArrayList<INode>();
 
 	/**
+	 * Field for checking if the node is valid
+	 */
+	private boolean _isValid = true;
+
+	/**
 	 * Creates a abstract container node with a name
 	 * 
 	 * @param name name
@@ -181,18 +186,29 @@ public abstract class AbstractContainerNode extends AbstractNode
 	@Override
 	public boolean isValid() // NOPMD
 	{
-		return true;
+		return _isValid;
 	}
 	
 	@Override
 	public void validate(final boolean recursive)
 	{
-		if(recursive)
+		boolean isValid = true;
+		for(INode subItem : this)
 		{
-			for(INode subItem : this)
+			if(subItem.getParent() != this)
+			{
+				isValid = false;
+			}
+			if(recursive)
 			{
 				subItem.validate(recursive);
 			}
+		}
+		if(_isValid != isValid)
+		{
+			fireNodeChanging(PROPERTY_VALID);
+			_isValid = isValid;
+			fireNodeChanged(PROPERTY_VALID);
 		}
 	}
 }

@@ -43,11 +43,10 @@ import seventhsense.data.file.FileReferenceManager;
 import seventhsense.sound.SoundFactory;
 import seventhsense.sound.engine.IPlayer;
 import seventhsense.sound.engine.ISoundListener;
-import seventhsense.sound.engine.PlayerMixer;
 import seventhsense.sound.engine.SoundEventType;
 import seventhsense.sound.engine.SoundException;
 import seventhsense.sound.fade.IPlayerFade;
-import seventhsense.sound.fade.SoundFadeFile;
+import seventhsense.sound.fade.ReplayFadeFile;
 
 /**
  * Abstract class for sounds.
@@ -230,7 +229,7 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 		if (_soundPlayer == null)
 		{
 			LOGGER.log(Level.FINE, _file + " load");
-			_soundPlayer = new SoundFadeFile(SoundFactory.createPlayer(new File(_file.getPath())));
+			_soundPlayer = new ReplayFadeFile(new File(_file.getPath()));
 			_soundPlayer.setVolume(_volume);
 			_soundPlayer.addSoundListener(_soundListener);
 		}
@@ -297,11 +296,11 @@ public abstract class AbstractSoundItem<E> implements IItem, IPlayable
 		}
 		if (_soundPlayer != null)
 		{
-			if (_soundPlayer.isPlaying())
+			/*if (_soundPlayer.isPlaying())
 			{
 				_soundPlayer.setFadeTime(_defaultFadeOutTime);
 				_soundPlayer.stop();
-			}
+			}*/
 			if (_fadeType == FadeType.NoFade)
 			{
 				_soundPlayer.setFadeTime(0);

@@ -179,6 +179,15 @@ public class TreeViewTransferHandler extends TransferHandler
 							LOGGER.log(Level.FINER, "link node " + importNode);
 							importDestinationNode.addNode(dropLocation.getChildIndex(), new LinkNode(importNode.getRealNode().getUUID()));
 						}
+						else if(support.getDropAction() == MOVE)
+						{
+							LOGGER.log(Level.FINER, "move node " + importNode);
+							if(importNode.getParent() != null)
+							{
+								importNode.getParent().removeNode(importNode);
+							}
+							importDestinationNode.addNode(dropLocation.getChildIndex(), importNode);
+						}
 						else
 						{
 							LOGGER.log(Level.FINER, "copy node " + importNode);
@@ -204,7 +213,19 @@ public class TreeViewTransferHandler extends TransferHandler
 							}
 							else
 							{
-								destinationNode.getParent().addNode(nodeIndex + 1, importNode.deepClone());
+								INode rootNode = destinationNode.getRealNode();
+								while (rootNode.getParent() != null)
+								{
+									rootNode = rootNode.getParent();
+								}
+								
+								INode addNode = importNode;
+								if(rootNode.findNode(importNode.getUUID()) != null)
+								{
+									addNode = importNode.deepClone();
+								}
+								
+								destinationNode.getParent().addNode(nodeIndex + 1, addNode);
 								nodeIndex++;
 							}
 						}
@@ -242,7 +263,7 @@ public class TreeViewTransferHandler extends TransferHandler
 	@Override
 	protected void exportDone(final JComponent source, final Transferable data, final int action)
 	{
-		if ((action == MOVE) && _editable)
+		/*if ((action == MOVE) && _editable)
 		{
 			LOGGER.log(Level.FINER, "exportDone");
 			try
@@ -266,7 +287,7 @@ public class TreeViewTransferHandler extends TransferHandler
 			{
 				LOGGER.log(Level.SEVERE, e.toString(), e);
 			}
-		}
+		}*/
 	}
 
 	@Override
