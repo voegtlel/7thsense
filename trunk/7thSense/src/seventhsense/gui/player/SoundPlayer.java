@@ -37,7 +37,6 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -87,7 +86,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 	/**
 	 * Seeker
 	 */
-	private TimeSliderLinear _timeSliderSeeker;
+	private final TimeSliderLinear _timeSliderSeeker;
 	
 	/**
 	 * Used for events
@@ -100,9 +99,9 @@ public class SoundPlayer extends ModelView<IPlayable>
 	private boolean _isVolumeChanging;
 
 	private DelayThread _seekerThread;
-	private NumberSlider _numberSliderVolume;
+	private final NumberSlider _numberSliderVolume;
 	
-	private IPropertyChangedListener<PlayerMixer> _playerMixerPropertyChangedListener;
+	private transient final IPropertyChangedListener<PlayerMixer> _playerMixerPropertyChangedListener;
 
 	/**
 	 * Constructor
@@ -299,7 +298,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 		_playerMixerPropertyChangedListener = new IPropertyChangedListener<PlayerMixer>()
 		{
 			@Override
-			public void propertyChanged(PlayerMixer caller, String property)
+			public void propertyChanged(final PlayerMixer caller, final String property)
 			{
 				if(PlayerMixer.PROPERTY_VOLUME.equals(property))
 				{
