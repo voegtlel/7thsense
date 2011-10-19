@@ -53,6 +53,14 @@ public class AudioBuffer
 		Empty
 	}
 	
+	private static enum PlayerState
+	{
+		Stopped,
+		Playing,
+		Paused,
+		Finished
+	}
+	
 	private final AL _al;
 	
 	private final int[] _buffers = new int[4];
@@ -64,15 +72,13 @@ public class AudioBuffer
 
 	private final IAudioInputStream _sourceStream;
 	
-	private boolean _holdPlaying;
-	
 	private final int[] _intBuffer = new int[1];
 	private final float[] _floatBuffer = new float[1];
 	
-	private boolean _isPlaying = false;
-	private boolean _isPaused = false;
+	private PlayerState _playState = PlayerState.Stopped;
 	
 	private int _lastBufferSize = 0;
+	private long _lastPlayPosition = 0;
 	
 	private final ITransitionReversible _volumeFactor = new ExpTransition(20.0);
 	
@@ -133,13 +139,13 @@ public class AudioBuffer
 	{
 		//final int state = getSourceState();
 		//return (state == AL.AL_PLAYING) || (state == AL.AL_PAUSED);
-		return _isPlaying;
+		return _playState == PlayerState.Playing || _playState == PlayerState.Paused;
 	}
 	
 	public boolean isPaused()
 	{
 		//return getSourceState() == AL.AL_PAUSED;
-		return _isPaused;
+		return _playState == PlayerState.Paused;
 	}
 	
 	/**
@@ -154,9 +160,7 @@ public class AudioBuffer
 		
 		_al.alSourcePlay(_source);
 		AlUtil.checkError(_al);
-		_holdPlaying = true;
-		_isPlaying = true;
-		_isPaused = false;
+		_playState = PlayerState.Playing;
 	}
 	
 	/**
@@ -166,9 +170,7 @@ public class AudioBuffer
 	{
 		_al.alSourceStop(_source);
 		AlUtil.checkError(_al);
-		_holdPlaying = false;
-		_isPlaying = false;
-		_isPaused = false;
+		_playState = PlayerState.Stopped;
 		// Reset stream
 		try
 		{
@@ -188,16 +190,15 @@ public class AudioBuffer
 	 */
 	public void resume() throws IOException
 	{
-		if(!_isPlaying)
+		if(_playState == PlayerState.Paused)
 		{
-			play();
-		}
-		else if(_isPaused)
-		{
-			_isPaused = false;
+			_playState = PlayerState.Playing;
 			_al.alSourcePlay(_source);
 			AlUtil.checkError(_al);
-			_holdPlaying = true;
+		}
+		else if(_playState != PlayerState.Playing)
+		{
+			play();
 		}
 	}
 	
@@ -206,10 +207,9 @@ public class AudioBuffer
 	 */
 	public void pause()
 	{
-		if(_isPlaying && !_isPaused)
+		if(_playState == PlayerState.Playing)
 		{
-			_holdPlaying = false;
-			_isPaused = true;
+			_playState = PlayerState.Paused;
 			_al.alSourcePause(_source);
 		}
 	}
@@ -221,8 +221,8 @@ public class AudioBuffer
 	 */
 	public long getPosition()
 	{
-		// Playing has just finished!
-		if(getSourceState() == AL.AL_STOPPED)
+		/*// Playing has just finished!
+		if(_playState == PlayerState.Finished)
 		{
 			return _sourceStream.getPosition();
 		}
@@ -231,7 +231,8 @@ public class AudioBuffer
 		final int queuedBuffersSize = (buffersQueued > 0?(buffersQueued - 1) * _pcmBuffer.length + _lastBufferSize:0);
 		final int byteOffset = getByteOffset();
 		LOGGER.log(Level.FINEST, "queued: " + queuedBuffersSize + ", source: " + _sourceStream.getPosition() + ", play: " + byteOffset);
-		return byteOffset + _sourceStream.getPosition() - queuedBuffersSize;
+		return byteOffset + _sourceStream.getPosition() - queuedBuffersSize;*/
+		return _lastPlayPosition;
 	}
 	
 	/**
@@ -242,11 +243,10 @@ public class AudioBuffer
 	 */
 	public void setPosition(final long position) throws IOException
 	{
-		boolean playAfter = !_isPaused && _isPlaying;
+		final boolean playAfter = _playState == PlayerState.Playing;
 		
 		// At first stop it
-		_holdPlaying = false;
-		_isPaused = true;
+		_playState = PlayerState.Paused;
 		_al.alSourceStop(_source);
 		AlUtil.checkError(_al);
 		// flush buffers
@@ -256,7 +256,6 @@ public class AudioBuffer
 		_sourceStream.setPosition(position);
 		// fill buffers
 		fillBuffers();
-		_isPlaying = true;
 		if(playAfter)
 		{
 			// start playing again
@@ -302,7 +301,7 @@ public class AudioBuffer
 	 */
 	public void setTime(final double time) throws IOException
 	{
-		long bytePosition = (long) (time * _sourceStream.getFrameSize() * _sourceStream.getSampleRate());
+		final long bytePosition = (long) (time * _sourceStream.getFrameSize() * _sourceStream.getSampleRate());
 		setPosition(bytePosition - (bytePosition % _sourceStream.getFrameSize()));
 	}
 	
@@ -442,14 +441,13 @@ public class AudioBuffer
 		
 		final int buffersQueued = getBuffersQueued();
 		
-		if((buffersQueued == 0) && _holdPlaying)
+		if((buffersQueued == 0) && ((_playState != PlayerState.Finished) && (_playState != PlayerState.Stopped)))
 		{
 			LOGGER.log(Level.FINE, "sound finish");
 			
-			_isPlaying = false;
-			_isPaused = false;
-			_holdPlaying = false;
+			_playState = PlayerState.Finished;
 			_lastBufferSize = 0;
+			_lastPlayPosition = _sourceStream.getPosition();
 			if(getSourceState() == AL.AL_PLAYING)
 			{
 				_al.alSourceStop(_source);
@@ -457,7 +455,12 @@ public class AudioBuffer
 			return false;
 		}
 		
-		if(_holdPlaying && (getSourceState() != AL.AL_PLAYING))
+		// Is playing or stopped
+		final int queuedBuffersSize = (buffersQueued > 0?(buffersQueued - 1) * _pcmBuffer.length + _lastBufferSize:0);
+		final int byteOffset = getByteOffset();
+		_lastPlayPosition = byteOffset + _sourceStream.getPosition() - queuedBuffersSize;
+		
+		if((_playState == PlayerState.Playing) && (getSourceState() != AL.AL_PLAYING))
 		{
 			LOGGER.log(Level.WARNING, "Buffer Underrun: Hold Play");
 			_al.alSourcePlay(_source);

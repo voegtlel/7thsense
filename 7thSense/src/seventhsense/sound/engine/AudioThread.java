@@ -69,16 +69,6 @@ public class AudioThread implements IPlayer
 	private boolean _isRunning = false;
 	
 	/**
-	 * Contains the current play-state (also true, when paused)
-	 */
-	private boolean _isPlaying = false;
-	
-	/**
-	 * Contains the paused state (can only be true, if not stopped)
-	 */
-	private boolean _isPaused = false;
-	
-	/**
 	 * True, if the thread is in a state where interrupting is possible
 	 */
 	private boolean _mayInterrupt = false;
@@ -135,8 +125,6 @@ public class AudioThread implements IPlayer
 			{
 				LOGGER.log(Level.FINER, "stopping thread");
 				_isRunning = false;
-				_isPlaying = false;
-				_isPaused = false;
 				if(_mayInterrupt)
 				{
 					LOGGER.log(Level.FINER, "interrupt thread");
@@ -179,11 +167,6 @@ public class AudioThread implements IPlayer
 				{
 					// Perform the buffer update and drain data
 					isFinished = !_playBuffer.update();
-					if(isFinished)
-					{
-						_isPlaying = false;
-						_isPaused = false;
-					}
 				}
 				if(isFinished)
 				{
@@ -201,8 +184,8 @@ public class AudioThread implements IPlayer
 					}
 					
 					// Determine delay
-					int threadDelay = 20;
-					if(_isPaused || !_isPlaying)
+					int threadDelay = 50;
+					if(_playBuffer.isPaused() || !_playBuffer.isPlaying())
 					{
 						//Save performance: Pause thread for infinite
 						threadDelay = 0;
@@ -213,12 +196,12 @@ public class AudioThread implements IPlayer
 					{
 						if(threadDelay == 0)
 						{
-							LOGGER.log(Level.FINER, "wait begin: " + _isPaused + " " + _isPlaying);
+							LOGGER.log(Level.FINER, "wait begin: " + _playBuffer.isPaused() + " " + _playBuffer.isPlaying());
 						}
 						_threadLock.wait(threadDelay);
 						if(threadDelay == 0)
 						{
-							LOGGER.log(Level.FINER, "wait end");
+							LOGGER.log(Level.FINER, "wait end: " + _playBuffer.isPaused() + " " + _playBuffer.isPlaying());
 						}
 					}
 					catch (InterruptedException e)
@@ -306,9 +289,6 @@ public class AudioThread implements IPlayer
 		{
 			checkThread();
 			LOGGER.log(Level.FINE, "play");
-			_isPlaying = true;
-			_isPaused = false;
-			_threadLock.notifyAll();
 			try
 			{
 				_playBuffer.play();
@@ -317,6 +297,7 @@ public class AudioThread implements IPlayer
 			{
 				throw new SoundException(e);
 			}
+			_threadLock.notifyAll();
 		}
 		fireEvent(SoundEventType.Started);
 	}
@@ -328,8 +309,6 @@ public class AudioThread implements IPlayer
 		{
 			checkThread();
 			LOGGER.log(Level.FINE, "stop");
-			_isPlaying = false;
-			_isPaused = false;
 			_playBuffer.stop();
 		}
 	}
@@ -340,12 +319,8 @@ public class AudioThread implements IPlayer
 		synchronized (_threadLock)
 		{
 			checkThread();
-			if(_isPlaying)
-			{
-				LOGGER.log(Level.FINE, "pause");
-				_isPaused = true;
-				_playBuffer.pause();
-			}
+			LOGGER.log(Level.FINE, "pause");
+			_playBuffer.pause();
 		}
 		fireEvent(SoundEventType.Paused);
 	}
@@ -357,9 +332,6 @@ public class AudioThread implements IPlayer
 		{
 			checkThread();
 			LOGGER.log(Level.FINE, "resume");
-			_isPlaying = true;
-			_isPaused = false;
-			_threadLock.notifyAll();
 			try
 			{
 				_playBuffer.resume();
@@ -368,6 +340,7 @@ public class AudioThread implements IPlayer
 			{
 				throw new SoundException(e);
 			}
+			_threadLock.notifyAll();
 		}
 		fireEvent(SoundEventType.Resumed);
 	}
@@ -377,7 +350,7 @@ public class AudioThread implements IPlayer
 	{
 		synchronized (_threadLock)
 		{
-			return _isPlaying;
+			return _playBuffer.isPlaying();
 		}
 	}
 	
@@ -386,7 +359,7 @@ public class AudioThread implements IPlayer
 	{
 		synchronized (_threadLock)
 		{
-			return _isPaused;
+			return _playBuffer.isPaused() ;
 		}
 	}
 	
