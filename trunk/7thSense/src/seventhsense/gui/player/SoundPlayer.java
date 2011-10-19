@@ -336,6 +336,7 @@ public class SoundPlayer extends ModelView<IPlayable>
 		if(_playingModel != null)
 		{
 			_playingModel.setFadeTime(0.25);
+			_playingModel.stop();
 		}
 		play(null);
 		_seekerThread.stop();

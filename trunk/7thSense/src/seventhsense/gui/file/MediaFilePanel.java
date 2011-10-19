@@ -42,6 +42,7 @@ import java.io.IOException;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -50,13 +51,9 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import seventhsense.data.INode;
 import seventhsense.data.eventlist.EventList;
 import seventhsense.data.file.FileReference;
 import seventhsense.data.file.FileReferenceManager;
-import seventhsense.gui.ModelView;
-
-import javax.swing.ImageIcon;
 
 /**
  * Class for selecting a media file

@@ -32,6 +32,7 @@ import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import seventhsense.data.AbstractNode;
 import seventhsense.data.INode;
 import seventhsense.data.listenerlist.IListItemListener;
 import seventhsense.data.listenerlist.IListenerList;
@@ -39,7 +40,6 @@ import seventhsense.data.scenario.AbstractScenarioNode;
 import seventhsense.data.scenario.sound.ISoundItemListener;
 import seventhsense.data.scenario.sound.MusicItem;
 import seventhsense.data.scenario.sound.SoundFxItem;
-import seventhsense.sound.engine.PlayerMixer;
 import seventhsense.sound.engine.SoundEventType;
 import seventhsense.sound.engine.SoundException;
 
@@ -51,11 +51,6 @@ import seventhsense.sound.engine.SoundException;
  */
 public class BasicScenarioNode extends AbstractScenarioNode
 {
-	/**
-	 * Property constant for events
-	 */
-	public static final String PROPERTY_VALID = "valid";
-
 	/**
 	 * Default serial version for serializable
 	 */
@@ -222,10 +217,10 @@ public class BasicScenarioNode extends AbstractScenarioNode
 		final boolean isValid = _musicManager.isValid() && _soundFxManager.isValid();
 		if (isValid != _isValid)
 		{
-			fireNodeChanging(PROPERTY_VALID);
+			fireNodeChanging(AbstractNode.PROPERTY_VALID);
 			LOGGER.log(Level.FINER, "validate " + _isValid + " -> " + isValid);
 			_isValid = isValid;
-			fireNodeChanged(PROPERTY_VALID);
+			fireNodeChanged(AbstractNode.PROPERTY_VALID);
 		}
 	}
 

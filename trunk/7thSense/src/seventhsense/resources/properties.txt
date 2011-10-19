@@ -1,6 +1,6 @@
 #Properties of 7thSense
-#Wed, 19 Oct 2011 18:16:00 +0200
+#Wed, 19 Oct 2011 22:33:10 +0200
 
-minor=10
+minor=11
 major=0.9
-date=20111019181557
+date=20111019223307
